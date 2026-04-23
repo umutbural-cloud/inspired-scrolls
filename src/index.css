@@ -231,6 +231,19 @@
     font-weight: 600;
   }
 
+  /* Highlight — kullanıcı işaretlemeleri */
+  .prose-reading mark.user-highlight {
+    background: hsl(var(--accent) / 0.22);
+    color: inherit;
+    padding: 0.05em 0.15em;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: background 150ms ease;
+  }
+  .prose-reading mark.user-highlight:hover {
+    background: hsl(var(--accent) / 0.35);
+  }
+
   /* Kart — yazı kartları */
   .article-card {
     transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
