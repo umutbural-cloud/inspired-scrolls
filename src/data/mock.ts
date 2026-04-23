@@ -709,3 +709,9 @@ export const articlesByAuthor = (slug: string) =>
 export const articlesByCategory = (slug: string) =>
   articles.filter((a) => a.categorySlug === slug);
 export const findCategory = (slug: string) => categories.find((c) => c.slug === slug);
+
+const tagSlugByName = new Map(tags.map((t) => [t.name, t.slug]));
+export const articlesByTag = (tagSlug: string) =>
+  articles.filter((a) =>
+    a.tags.some((t) => (tagSlugByName.get(t) ?? t) === tagSlug),
+  );
