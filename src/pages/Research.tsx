@@ -19,7 +19,7 @@ const Research = () => {
               <h1 className="mt-3 font-display text-5xl md:text-6xl tracking-tight leading-[1.02]">
                 Araştırmalar
               </h1>
-              <p className="mt-5 font-serif-body italic text-xl text-muted-foreground max-w-xl text-balance">
+              <p className="mt-5 font-serif-body text-xl text-muted-foreground max-w-xl text-balance">
                 Kıdemli yazarlardan kaynaklara dayalı, derinlemesine incelemeler.
                 Her metin bir metodoloji notu ve kaynakça ile birlikte gelir.
               </p>
@@ -58,7 +58,7 @@ const Research = () => {
                   <h3 className="mt-2 font-display text-2xl md:text-3xl leading-snug group-hover:text-accent transition-colors text-balance">
                     {a.title}
                   </h3>
-                  <p className="mt-3 font-serif-body italic text-muted-foreground max-w-2xl text-pretty leading-relaxed">
+                  <p className="mt-3 font-serif-body text-muted-foreground max-w-2xl text-pretty leading-relaxed">
                     {a.subtitle}
                   </p>
                   <div className="mt-4 text-xs text-muted-foreground">

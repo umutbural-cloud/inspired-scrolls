@@ -168,7 +168,7 @@ const ContentInner = () => {
         </div>
       ) : (
         <div>
-          <p className="text-sm text-muted-foreground italic mb-5 max-w-xl">
+          <p className="text-sm text-muted-foreground mb-5 max-w-xl">
             Daha ince bir filtre — etiketler bir yazının içindeki kelimelerdir.
             Birkaç tanesini seç, takip ettiklerinden bağımsız olarak öne çıkaralım.
           </p>

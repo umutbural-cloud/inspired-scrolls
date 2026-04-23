@@ -119,7 +119,7 @@ const AuthorProfile = () => {
         </div>
 
         {filtered.length === 0 ? (
-          <p className="text-muted-foreground italic py-12 text-center">
+          <p className="text-muted-foreground py-12 text-center">
             Bu kategoride henüz yazı yok.
           </p>
         ) : (

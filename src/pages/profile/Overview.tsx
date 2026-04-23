@@ -90,7 +90,7 @@ const OverviewInner = () => {
           </Link>
         </div>
         {recent.length === 0 ? (
-          <p className="text-muted-foreground italic py-8 border-y border-hairline text-center">
+          <p className="text-muted-foreground py-8 border-y border-hairline text-center">
             Henüz tamamladığın bir yazı yok. Bir yazıyı sonuna kadar okuyup
             "Kaydır ve tamamla" ile bu listeye ekleyebilirsin.
           </p>

@@ -32,7 +32,7 @@ export const AuthShell = ({
         <header className="flex items-center justify-between">
           <Link to="/" className="flex items-baseline gap-2">
             <span className="font-display text-xl tracking-tight">Gelişim</span>
-            <span className="font-display italic text-xl tracking-tight text-accent">
+            <span className="font-display text-xl tracking-tight text-accent">
               Yolcuları
             </span>
           </Link>
@@ -50,7 +50,7 @@ export const AuthShell = ({
             <h1 className="mt-3 font-display text-4xl md:text-5xl tracking-tight leading-[1.05] text-balance">
               {title}
             </h1>
-            <p className="mt-4 font-serif-body italic text-muted-foreground text-balance">
+            <p className="mt-4 font-serif-body text-muted-foreground text-balance">
               {subtitle}
             </p>
 
@@ -74,7 +74,7 @@ export const AuthShell = ({
         <div className="absolute inset-0 bg-background/55" aria-hidden />
         <div className="relative z-10 flex flex-col justify-between p-12 xl:p-16 w-full">
           <span className="eyebrow text-accent">Manifesto</span>
-          <blockquote className="font-display italic text-3xl xl:text-4xl leading-tight text-balance max-w-lg">
+          <blockquote className="font-display text-3xl xl:text-4xl leading-tight text-balance max-w-lg">
             "{quote.text}"
           </blockquote>
           <div className="text-sm text-muted-foreground font-mono-jb tracking-wider">

@@ -43,7 +43,7 @@ const FollowingInner = () => {
         </div>
       ) : followedAuthors.length === 0 ? (
         <div className="border-y border-hairline py-14 text-center">
-          <p className="text-muted-foreground italic">
+          <p className="text-muted-foreground">
             Henüz kimseyi takip etmiyorsun.
           </p>
           <Link

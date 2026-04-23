@@ -176,7 +176,7 @@ const Reading = () => {
         <h1 className="mt-6 font-display text-4xl md:text-5xl lg:text-6xl leading-[1.05] tracking-tight text-balance">
           {article.title}
         </h1>
-        <p className="mt-6 text-xl md:text-2xl font-serif-body italic text-muted-foreground leading-snug text-balance">
+        <p className="mt-6 text-xl md:text-2xl font-serif-body text-muted-foreground leading-snug text-balance">
           {article.subtitle}
         </p>
 

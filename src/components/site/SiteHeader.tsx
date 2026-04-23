@@ -36,7 +36,7 @@ export const SiteHeader = () => {
           <span className="font-display text-2xl tracking-tight text-foreground">
             Gelişim
           </span>
-          <span className="font-display italic text-2xl tracking-tight text-accent">
+          <span className="font-display text-2xl tracking-tight text-accent">
             Yolcuları
           </span>
         </Link>

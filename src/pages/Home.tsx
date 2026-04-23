@@ -24,7 +24,7 @@ const Home = () => {
                 <h1 className="font-display text-4xl md:text-5xl lg:text-6xl leading-[1.02] tracking-tight text-balance">
                   {featured.title}
                 </h1>
-                <p className="mt-6 text-xl md:text-2xl font-serif-body italic leading-snug text-muted-foreground text-balance">
+                <p className="mt-6 text-xl md:text-2xl font-serif-body leading-snug text-muted-foreground text-balance">
                   {featured.subtitle}
                 </p>
               </Link>
@@ -55,7 +55,7 @@ const Home = () => {
                     className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
                   />
                 </div>
-                <div className="mt-3 text-xs text-muted-foreground italic">
+                <div className="mt-3 text-xs text-muted-foreground">
                   Editörün seçimi · {featured.category}
                 </div>
               </Link>
@@ -111,7 +111,7 @@ const Home = () => {
       <section className="border-y border-hairline bg-surface-sunken/40">
         <div className="content-column px-6 py-20 md:py-28 text-center">
           <span className="eyebrow text-accent">Manifesto</span>
-          <p className="mt-6 font-display italic text-3xl md:text-4xl lg:text-5xl leading-tight text-balance">
+          <p className="mt-6 font-display text-3xl md:text-4xl lg:text-5xl leading-tight text-balance">
             "Yavaşça okumak, çağdaş bir cesarettir.
             Bir cümlenin önünde durabilmek, bir hayatı yeniden okumakla aynı şeydir."
           </p>

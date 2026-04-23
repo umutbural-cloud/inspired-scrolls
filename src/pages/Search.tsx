@@ -93,7 +93,7 @@ const Search = () => {
           <h1 className="mt-4 font-display text-4xl md:text-5xl tracking-tight">
             Bir kelime, bir yazar, bir yer.
           </h1>
-          <p className="mt-4 text-lg font-serif-body italic text-muted-foreground max-w-xl">
+          <p className="mt-4 text-lg font-serif-body text-muted-foreground max-w-xl">
             Yazıların başlıklarında, yazarlarda, kategorilerde ve etiketlerde ara.
           </p>
 
@@ -160,7 +160,7 @@ const Search = () => {
 
           {total === 0 && (
             <div className="text-center py-20">
-              <p className="font-display text-2xl text-muted-foreground italic">
+              <p className="font-display text-2xl text-muted-foreground">
                 "{q}" için bir şey bulamadık.
               </p>
               <p className="mt-3 text-sm text-muted-foreground">
