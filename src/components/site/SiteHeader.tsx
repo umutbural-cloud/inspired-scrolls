@@ -32,11 +32,11 @@ export const SiteHeader = () => {
       }`}
     >
       <div className="wide-column flex items-center justify-between gap-8 px-6 py-5">
-        <Link to="/" className="flex items-baseline gap-2 group">
-          <span className="font-display text-2xl tracking-tight text-foreground">
+        <Link to="/" className="flex items-baseline gap-1.5 group">
+          <span className="font-display text-xl md:text-[1.35rem] tracking-tight font-semibold text-foreground">
             Gelişim
           </span>
-          <span className="font-display text-2xl tracking-tight text-accent">
+          <span className="font-display text-xl md:text-[1.35rem] tracking-tight font-semibold text-accent">
             Yolcuları
           </span>
         </Link>
@@ -48,7 +48,7 @@ export const SiteHeader = () => {
               to={item.to}
               end={item.end}
               className={({ isActive }) =>
-                `text-sm font-serif-body transition-colors ${
+                `text-sm transition-colors ${
                   isActive
                     ? "text-foreground"
                     : "text-muted-foreground hover:text-foreground"
