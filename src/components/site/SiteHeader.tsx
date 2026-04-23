@@ -1,6 +1,7 @@
 import { Link, NavLink, useLocation } from "react-router-dom";
-import { Search } from "lucide-react";
+import { Search, User as UserIcon } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useAuth } from "@/context/AuthContext";
 
 const nav = [
   { to: "/", label: "Ana Sayfa", end: true },
@@ -11,6 +12,7 @@ const nav = [
 export const SiteHeader = () => {
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
+  const { session, loading } = useAuth();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -65,18 +67,30 @@ export const SiteHeader = () => {
           >
             <Search className="h-4 w-4" strokeWidth={1.5} />
           </button>
-          <Link
-            to="/giris"
-            className="hidden sm:inline-block text-sm text-muted-foreground hover:text-foreground transition-colors"
-          >
-            Giriş
-          </Link>
-          <Link
-            to="/kayit"
-            className="text-sm border border-foreground/80 px-4 py-2 hover:bg-foreground hover:text-background transition-colors"
-          >
-            Kayıt ol
-          </Link>
+          {loading ? null : session ? (
+            <Link
+              to="/profil"
+              className="inline-flex items-center gap-2 text-sm border border-foreground/80 px-4 py-2 hover:bg-foreground hover:text-background transition-colors"
+            >
+              <UserIcon className="h-3.5 w-3.5" strokeWidth={1.5} />
+              Profil
+            </Link>
+          ) : (
+            <>
+              <Link
+                to="/giris"
+                className="hidden sm:inline-block text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Giriş
+              </Link>
+              <Link
+                to="/kayit"
+                className="text-sm border border-foreground/80 px-4 py-2 hover:bg-foreground hover:text-background transition-colors"
+              >
+                Kayıt ol
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </header>
