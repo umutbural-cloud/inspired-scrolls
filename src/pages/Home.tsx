@@ -10,31 +10,31 @@ const Home = () => {
     <SiteLayout>
       {/* Hero — Bugünün Yazısı */}
       <section className="border-b border-hairline">
-        <div className="wide-column px-6 pt-16 pb-20 md:pt-20 md:pb-24">
-          <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+        <div className="wide-column px-6 pt-8 pb-10 md:pt-20 md:pb-24">
+          <div className="grid lg:grid-cols-12 gap-6 lg:gap-14 items-center">
             <div className="lg:col-span-7 animate-fade-up order-2 lg:order-1">
-              <div className="flex items-center gap-3 mb-6">
+              <div className="flex items-center gap-3 mb-3 md:mb-6">
                 <span className="eyebrow text-accent">Bugünün Yazısı</span>
-                <span className="h-px w-16 bg-hairline" />
+                <span className="h-px w-10 md:w-16 bg-hairline" />
                 <span className="text-xs text-muted-foreground font-mono-jb">
                   {featured.publishedAt.toUpperCase()}
                 </span>
               </div>
               <Link to={`/yazi/${featured.slug}`} className="group block">
-                <h1 className="font-display text-4xl md:text-5xl lg:text-6xl leading-[1.02] tracking-tight text-balance">
+                <h1 className="font-display text-2xl md:text-5xl lg:text-6xl leading-[1.05] md:leading-[1.02] tracking-tight text-balance">
                   {featured.title}
                 </h1>
-                <p className="mt-5 text-lg md:text-xl leading-snug text-muted-foreground text-balance max-w-xl">
+                <p className="mt-3 md:mt-5 text-sm md:text-xl leading-snug text-muted-foreground text-balance max-w-xl">
                   {featured.subtitle}
                 </p>
               </Link>
-              <p className="mt-5 text-[0.98rem] md:text-base leading-relaxed text-foreground/80 max-w-xl text-pretty">
+              <p className="mt-3 md:mt-5 text-sm md:text-base leading-relaxed text-foreground/80 max-w-xl text-pretty line-clamp-3 md:line-clamp-none">
                 {featured.excerpt}
               </p>
-              <div className="mt-8 flex items-center gap-5 flex-wrap">
+              <div className="mt-5 md:mt-8 flex items-center gap-4 md:gap-5 flex-wrap">
                 <Link
                   to={`/yazi/${featured.slug}`}
-                  className="inline-flex items-center gap-2 text-sm font-medium px-4 h-10 bg-foreground text-background hover:bg-foreground/90 transition-colors rounded-md"
+                  className="inline-flex items-center gap-2 text-sm font-medium px-4 h-9 md:h-10 bg-foreground text-background hover:bg-foreground/90 transition-colors rounded-md"
                 >
                   Okumaya başla <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.5} />
                 </Link>
@@ -46,7 +46,7 @@ const Home = () => {
 
             <div className="lg:col-span-5 animate-scale-in order-1 lg:order-2">
               <Link to={`/yazi/${featured.slug}`} className="block group">
-                <div className="aspect-[3/4] overflow-hidden bg-secondary">
+                <div className="aspect-[16/10] md:aspect-[3/4] overflow-hidden bg-secondary rounded-md">
                   <img
                     src={heroImg}
                     alt={featured.title}
@@ -55,7 +55,7 @@ const Home = () => {
                     className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
                   />
                 </div>
-                <div className="mt-3 text-xs text-muted-foreground">
+                <div className="mt-2 md:mt-3 text-xs text-muted-foreground">
                   Editörün seçimi · {featured.category}
                 </div>
               </Link>
