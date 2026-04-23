@@ -71,6 +71,67 @@ const Reading = () => {
     return () => window.removeEventListener("scroll", onScroll);
   }, [slug]);
 
+  // Metin seçimi → highlight popover
+  useEffect(() => {
+    const onSelectionChange = () => {
+      const sel = window.getSelection();
+      if (!sel || sel.isCollapsed || sel.rangeCount === 0) {
+        setSelectionRect(null);
+        setPendingSelection("");
+        return;
+      }
+      const text = sel.toString().trim();
+      if (text.length < 3) {
+        setSelectionRect(null);
+        return;
+      }
+      const range = sel.getRangeAt(0);
+      const container = articleRef.current;
+      if (!container) return;
+      // Sadece makale içindeki seçimler
+      if (!container.contains(range.commonAncestorContainer)) {
+        setSelectionRect(null);
+        return;
+      }
+      const rect = range.getBoundingClientRect();
+      setPendingSelection(text);
+      setSelectionRect({
+        x: rect.left + rect.width / 2 + window.scrollX,
+        y: rect.top + window.scrollY,
+      });
+    };
+    document.addEventListener("selectionchange", onSelectionChange);
+    return () => document.removeEventListener("selectionchange", onSelectionChange);
+  }, []);
+
+  const addHighlightFromSelection = () => {
+    if (!pendingSelection) return;
+    const next: Highlight = {
+      id: `${Date.now()}`,
+      text: pendingSelection,
+      createdAt: Date.now(),
+    };
+    persistHighlights([next, ...highlights]);
+    window.getSelection()?.removeAllRanges();
+    setSelectionRect(null);
+    setPendingSelection("");
+    toast.success("Vurgulandı");
+  };
+
+  const removeHighlight = (id: string) => {
+    persistHighlights(highlights.filter((h) => h.id !== id));
+  };
+
+  const addNote = () => {
+    const v = noteDraft.trim();
+    if (!v) return;
+    persistNotes([{ id: `${Date.now()}`, text: v, createdAt: Date.now() }, ...notes]);
+    setNoteDraft("");
+  };
+  const removeNote = (id: string) => {
+    persistNotes(notes.filter((n) => n.id !== id));
+  };
+
   // İlk yüklemede tamamlandı + kaydedildi durumunu çek
   useEffect(() => {
     if (!user || !article) return;
