@@ -168,7 +168,7 @@ const Reading = () => {
     })();
     return () => { cancelled = true; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user, article?.slug]);
+  }, [user?.id, article?.slug]);
 
   if (!article) return <Navigate to="/" replace />;
 
