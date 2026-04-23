@@ -26,7 +26,7 @@ const SignUp = () => {
       return;
     }
     setSubmitting(true);
-    const { error } = await supabase.auth.signUp({
+    const { data: signUpData, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -42,6 +42,36 @@ const SignUp = () => {
           : error.message
       );
       return;
+    }
+    // Demo seed: birkaç tamamlanmış yazı + kaydedilmiş yazı
+    const newUserId = signUpData.user?.id;
+    if (newUserId) {
+      try {
+        await supabase.from("completed_articles").insert([
+          { user_id: newUserId, article_slug: "sehrin-grameri", read_minutes: 11,
+            completed_at: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString() },
+          { user_id: newUserId, article_slug: "annemin-mektuplari", read_minutes: 8,
+            completed_at: new Date().toISOString() },
+        ]);
+        const { data: defList } = await supabase
+          .from("reading_lists")
+          .select("id")
+          .eq("user_id", newUserId)
+          .eq("is_default", true)
+          .maybeSingle();
+        if (defList) {
+          await supabase.from("reading_list_items").insert([
+            { list_id: defList.id, article_slug: "dikkat-ve-zaman" },
+            { list_id: defList.id, article_slug: "okumanin-bicimi" },
+          ]);
+        }
+        await supabase.from("author_follows").insert({
+          user_id: newUserId,
+          author_slug: "elif-yildirim",
+        });
+      } catch {
+        // seed sessizce başarısız olabilir, kritik değil
+      }
     }
     toast.success("Hoş geldin. Hesabın oluşturuldu.");
     navigate("/profil", { replace: true });
