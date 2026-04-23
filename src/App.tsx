@@ -22,6 +22,10 @@ import Following from "./pages/profile/Following.tsx";
 import Settings from "./pages/profile/Settings.tsx";
 import NotificationSettings from "./pages/profile/NotificationSettings.tsx";
 import ContentPreferences from "./pages/profile/ContentPreferences.tsx";
+import EditorPage from "./pages/profile/Editor.tsx";
+import Drafts from "./pages/profile/Drafts.tsx";
+import Posts from "./pages/profile/Posts.tsx";
+import RevisionPage from "./pages/profile/Revision.tsx";
 
 const queryClient = new QueryClient();
 
@@ -51,6 +55,10 @@ const App = () => (
             <Route path="/profil/ayarlar" element={<Settings />} />
             <Route path="/profil/ayarlar/bildirim" element={<NotificationSettings />} />
             <Route path="/profil/ayarlar/icerik" element={<ContentPreferences />} />
+            <Route path="/profil/yaz/:id" element={<EditorPage />} />
+            <Route path="/profil/taslaklar" element={<Drafts />} />
+            <Route path="/profil/yazilar" element={<Posts />} />
+            <Route path="/profil/revize/:id" element={<RevisionPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
