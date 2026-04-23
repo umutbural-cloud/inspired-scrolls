@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useParams, Navigate } from "react-router-dom";
-import { Bookmark, Heart, Share2, ArrowRight, ArrowLeft, Check } from "lucide-react";
+import { Bookmark, Heart, Share2, ArrowRight, ArrowLeft, Check, Highlighter, Trash2, NotebookPen, Plus } from "lucide-react";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { ArticleCard } from "@/components/site/ArticleCard";
 import { findArticle, articles, tags as allTags } from "@/data/mock";
