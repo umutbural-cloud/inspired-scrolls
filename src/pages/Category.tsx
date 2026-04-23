@@ -49,7 +49,7 @@ const Category = () => {
           <h1 className="mt-4 font-display text-5xl md:text-7xl tracking-tight">
             {title}
           </h1>
-          <p className="mt-6 text-xl font-serif-body text-muted-foreground max-w-xl text-balance">
+          <p className="mt-6 text-xl text-muted-foreground max-w-xl text-balance">
             {description}
           </p>
           <div className="mt-8 text-xs font-mono-jb tracking-wider text-muted-foreground">

@@ -60,7 +60,7 @@ const SignIn = () => {
             onChange={(e) => setEmail(e.target.value)}
             autoComplete="email"
             placeholder="elif@ornek.com"
-            className="w-full h-11 px-3 bg-transparent border border-hairline focus:border-foreground outline-none transition-colors text-base font-serif-body"
+            className="w-full h-11 px-3 bg-transparent border border-hairline focus:border-foreground outline-none transition-colors text-base "
           />
         </div>
         <div className="space-y-1.5">
@@ -78,7 +78,7 @@ const SignIn = () => {
             onChange={(e) => setPassword(e.target.value)}
             autoComplete="current-password"
             placeholder="••••••••"
-            className="w-full h-11 px-3 bg-transparent border border-hairline focus:border-foreground outline-none transition-colors text-base font-serif-body"
+            className="w-full h-11 px-3 bg-transparent border border-hairline focus:border-foreground outline-none transition-colors text-base "
           />
         </div>
 

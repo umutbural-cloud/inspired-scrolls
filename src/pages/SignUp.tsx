@@ -101,7 +101,7 @@ const SignUp = () => {
             onChange={(e) => setName(e.target.value)}
             autoComplete="name"
             placeholder="Elif Yıldırım"
-            className="w-full h-11 px-3 bg-transparent border border-hairline focus:border-foreground outline-none transition-colors text-base font-serif-body"
+            className="w-full h-11 px-3 bg-transparent border border-hairline focus:border-foreground outline-none transition-colors text-base "
           />
         </div>
         <div className="space-y-1.5">
@@ -114,7 +114,7 @@ const SignUp = () => {
             onChange={(e) => setEmail(e.target.value)}
             autoComplete="email"
             placeholder="elif@ornek.com"
-            className="w-full h-11 px-3 bg-transparent border border-hairline focus:border-foreground outline-none transition-colors text-base font-serif-body"
+            className="w-full h-11 px-3 bg-transparent border border-hairline focus:border-foreground outline-none transition-colors text-base "
           />
         </div>
         <div className="space-y-1.5">
@@ -128,7 +128,7 @@ const SignUp = () => {
             onChange={(e) => setPassword(e.target.value)}
             autoComplete="new-password"
             placeholder="En az 8 karakter"
-            className="w-full h-11 px-3 bg-transparent border border-hairline focus:border-foreground outline-none transition-colors text-base font-serif-body"
+            className="w-full h-11 px-3 bg-transparent border border-hairline focus:border-foreground outline-none transition-colors text-base "
           />
           <p className="text-xs text-muted-foreground">
             Şifren cihazlar arasında senin yanında kalır.
