@@ -65,12 +65,112 @@ export const authors: Author[] = [
       "Deniz Arslan kişisel deneyim ve sözlü tarih arasında dolaşan kısa anlatılar yazıyor. İlk kitabı 'Yaz Sonu Mektupları' 2023'te yayımlandı.",
     stats: { posts: 19, reads: "187K", avgMinutes: 9 },
   },
+  {
+    slug: "selin-kara",
+    name: "Selin Kara",
+    title: "Gazeteci · Kültür",
+    avatar: author1,
+    bio: "Sinema, müzik ve görsel kültür üzerine eleştiriler.",
+    longBio:
+      "Selin Kara on iki yıldır kültür gazeteciliği yapıyor. Cannes, Berlinale ve Venedik festivallerinden düzenli yazıyor; iki film kitabı yayımladı.",
+    stats: { posts: 31, reads: "356K", avgMinutes: 10 },
+  },
+  {
+    slug: "mert-ozdemir",
+    name: "Mert Özdemir",
+    title: "Mimar · Yazar",
+    avatar: author2,
+    bio: "Mekan, ışık ve sessizlik üzerine düşünüyor.",
+    longBio:
+      "Mert Özdemir İstanbul ve Tokyo'da çalışan bir mimar. Ando, Zumthor ve Sejima üzerine denemeleri çeşitli dergilerde yayımlandı; 'Boş Oda' adlı kitabın yazarı.",
+    stats: { posts: 14, reads: "142K", avgMinutes: 14 },
+  },
+  {
+    slug: "ayse-tekin",
+    name: "Ayşe Tekin",
+    title: "Sosyolog · Araştırmacı",
+    avatar: author3,
+    bio: "Kentsel eşitsizlik, emek ve gündelik hayat.",
+    longBio:
+      "Ayşe Tekin Boğaziçi Üniversitesi'nde sosyoloji doktorası yaptı. Kentsel emek, kadın çalışmaları ve mahalle araştırmaları üzerine üç kitabı var.",
+    stats: { posts: 22, reads: "264K", avgMinutes: 19 },
+  },
+  {
+    slug: "can-demir",
+    name: "Can Demir",
+    title: "Şair · Editör",
+    avatar: author2,
+    bio: "Şiir, çeviri ve klasik edebiyat üzerine yazıyor.",
+    longBio:
+      "Can Demir dört şiir kitabı yayımladı, Rilke ve Celan çevirileri yaptı. YKY'de editör olarak çalıştı, şimdi bağımsız yazıyor.",
+    stats: { posts: 17, reads: "168K", avgMinutes: 8 },
+  },
+  {
+    slug: "leyla-bahar",
+    name: "Leyla Bahar",
+    title: "Bilim yazarı",
+    avatar: author1,
+    bio: "Beyin, uyku ve davranış bilimleri üzerine yazıyor.",
+    longBio:
+      "Leyla Bahar nörobilim doktoralı bir bilim iletişimcisi. New Scientist Türkiye'de düzenli yazdı; 'Uykunun Grameri' kitabının yazarı.",
+    stats: { posts: 26, reads: "318K", avgMinutes: 13 },
+  },
+  {
+    slug: "okan-firat",
+    name: "Okan Fırat",
+    title: "Politika analisti",
+    avatar: author2,
+    bio: "İklim, enerji ve siyaset kesişimi üzerine.",
+    longBio:
+      "Okan Fırat Brüksel merkezli bir iklim politikası analisti. AB Yeşil Mutabakatı üzerine raporlar hazırlıyor; çeşitli düşünce kuruluşlarına danışmanlık yapıyor.",
+    stats: { posts: 11, reads: "98K", avgMinutes: 16 },
+  },
 ];
 
 export const categories = [
   { slug: "arastirmalar", name: "Araştırmalar", description: "Kaynaklara dayalı, derinlemesine incelemeler." },
   { slug: "kolektif", name: "Kolektif", description: "Kişisel deneyim ve gözlem üzerine yazılar." },
+  { slug: "sehir", name: "Şehir", description: "Mekânlar, sokaklar ve gündelik hayatın grameri." },
+  { slug: "dusunce", name: "Düşünce", description: "Felsefe, etik ve çağdaş tartışmalar." },
+  { slug: "edebiyat", name: "Edebiyat", description: "Roman, şiir, deneme ve okuma kültürü." },
+  { slug: "sanat", name: "Sanat", description: "Sinema, müzik, mimari ve görsel kültür." },
+  { slug: "bilim", name: "Bilim", description: "Beyin, doğa ve insan üzerine bilimsel yazılar." },
+  { slug: "politika", name: "Politika", description: "İklim, ekonomi ve toplumsal mesele yazıları." },
 ];
+
+export type Tag = { slug: string; name: string };
+
+export const tags: Tag[] = [
+  { slug: "sehir", name: "şehir" },
+  { slug: "hafiza", name: "hafıza" },
+  { slug: "yavaslik", name: "yavaşlık" },
+  { slug: "mimari", name: "mimari" },
+  { slug: "isik", name: "ışık" },
+  { slug: "minimalizm", name: "minimalizm" },
+  { slug: "felsefe", name: "felsefe" },
+  { slug: "dikkat", name: "dikkat" },
+  { slug: "teknoloji", name: "teknoloji" },
+  { slug: "okuma", name: "okuma" },
+  { slug: "kitap", name: "kitap" },
+  { slug: "siir", name: "şiir" },
+  { slug: "ceviri", name: "çeviri" },
+  { slug: "aile", name: "aile" },
+  { slug: "ev", name: "ev" },
+  { slug: "goc", name: "göç" },
+  { slug: "kisisel", name: "kişisel" },
+  { slug: "sinema", name: "sinema" },
+  { slug: "muzik", name: "müzik" },
+  { slug: "sanat", name: "sanat" },
+  { slug: "uyku", name: "uyku" },
+  { slug: "beyin", name: "beyin" },
+  { slug: "iklim", name: "iklim" },
+  { slug: "politika", name: "politika" },
+  { slug: "emek", name: "emek" },
+  { slug: "kadin", name: "kadın" },
+  { slug: "mahalle", name: "mahalle" },
+];
+
+export const findTag = (slug: string) => tags.find((t) => t.slug === slug);
 
 const lorem = [
   "Şehir bazen bir yüzdür: tanıdıktır ama uzaktır. Sokakların kıvrımları, bir mektubun kıvrımları gibidir; içinde söylenmemiş şeyler taşır. Yürürken farkında olmadan hatırlarız — bir balkon, bir tabela, bir lambanın titreyişi. Hafıza burada bir mekan değil, bir hızdır.",
