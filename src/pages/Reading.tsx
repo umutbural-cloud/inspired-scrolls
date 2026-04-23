@@ -4,10 +4,14 @@ import { Bookmark, Heart, Share2, ArrowRight, ArrowLeft, Check } from "lucide-re
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { ArticleCard } from "@/components/site/ArticleCard";
 import { findArticle, articles } from "@/data/mock";
+import { useAuth } from "@/context/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 const Reading = () => {
   const { slug } = useParams();
   const article = slug ? findArticle(slug) : undefined;
+  const { user } = useAuth();
   const [progress, setProgress] = useState(0);
   const [liked, setLiked] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -29,7 +33,94 @@ const Reading = () => {
     return () => window.removeEventListener("scroll", onScroll);
   }, [slug]);
 
+  // İlk yüklemede tamamlandı + kaydedildi durumunu çek
+  useEffect(() => {
+    if (!user || !article) return;
+    let cancelled = false;
+    (async () => {
+      const [{ data: c }, { data: defList }] = await Promise.all([
+        supabase
+          .from("completed_articles")
+          .select("article_slug")
+          .eq("user_id", user.id)
+          .eq("article_slug", article!.slug)
+          .maybeSingle(),
+        supabase
+          .from("reading_lists")
+          .select("id")
+          .eq("user_id", user.id)
+          .eq("is_default", true)
+          .maybeSingle(),
+      ]);
+      if (cancelled) return;
+      if (c) {
+        setCompleted(true);
+        setDrag(1);
+      }
+      if (defList) {
+        const { data: it } = await supabase
+          .from("reading_list_items")
+          .select("article_slug")
+          .eq("list_id", defList.id)
+          .eq("article_slug", article!.slug)
+          .maybeSingle();
+        if (!cancelled && it) setSaved(true);
+      }
+    })();
+    return () => { cancelled = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, article?.slug]);
+
   if (!article) return <Navigate to="/" replace />;
+
+  const persistComplete = async () => {
+    if (!user || !article) {
+      toast("Tamamlanan yazıları kaydetmek için giriş yap.");
+      return;
+    }
+    const { error } = await supabase
+      .from("completed_articles")
+      .upsert({
+        user_id: user.id,
+        article_slug: article.slug,
+        read_minutes: article.readMinutes,
+      });
+    if (error) toast.error(error.message);
+    else toast.success("Tamamladıklarına eklendi.");
+  };
+
+  const toggleSave = async () => {
+    if (!user || !article) {
+      toast("Yazıyı kaydetmek için giriş yap.");
+      return;
+    }
+    const { data: defList } = await supabase
+      .from("reading_lists")
+      .select("id")
+      .eq("user_id", user.id)
+      .eq("is_default", true)
+      .maybeSingle();
+    if (!defList) return;
+    if (saved) {
+      setSaved(false);
+      await supabase
+        .from("reading_list_items")
+        .delete()
+        .eq("list_id", defList.id)
+        .eq("article_slug", article.slug);
+    } else {
+      setSaved(true);
+      const { error } = await supabase
+        .from("reading_list_items")
+        .insert({ list_id: defList.id, article_slug: article.slug });
+      if (error) {
+        setSaved(false);
+        toast.error(error.message);
+      } else {
+        toast.success("Kaydettiklerime eklendi.");
+      }
+    }
+  };
 
   const HANDLE = 48; // px
 
@@ -52,7 +143,10 @@ const Reading = () => {
     draggingRef.current = false;
     if (drag > 0.92) {
       setDrag(1);
-      setCompleted(true);
+      if (!completed) {
+        setCompleted(true);
+        persistComplete();
+      }
     } else {
       setDrag(0);
     }
@@ -114,7 +208,7 @@ const Reading = () => {
               <Heart className="h-4 w-4" strokeWidth={1.5} fill={liked ? "currentColor" : "none"} />
             </button>
             <button
-              onClick={() => setSaved((v) => !v)}
+              onClick={toggleSave}
               className={`p-2.5 border border-hairline transition-colors ${
                 saved ? "bg-foreground text-background border-foreground" : "hover:bg-surface-sunken"
               }`}

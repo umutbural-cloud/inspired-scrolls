@@ -13,7 +13,14 @@ import Research from "./pages/Research.tsx";
 import Collective from "./pages/Collective.tsx";
 import SignIn from "./pages/SignIn.tsx";
 import SignUp from "./pages/SignUp.tsx";
-import Profile from "./pages/Profile.tsx";
+import Overview from "./pages/profile/Overview.tsx";
+import Lists from "./pages/profile/Lists.tsx";
+import ListDetail from "./pages/profile/ListDetail.tsx";
+import Completed from "./pages/profile/Completed.tsx";
+import Following from "./pages/profile/Following.tsx";
+import Settings from "./pages/profile/Settings.tsx";
+import NotificationSettings from "./pages/profile/NotificationSettings.tsx";
+import ContentPreferences from "./pages/profile/ContentPreferences.tsx";
 
 const queryClient = new QueryClient();
 
@@ -34,7 +41,14 @@ const App = () => (
             <Route path="/kolektif" element={<Collective />} />
             <Route path="/giris" element={<SignIn />} />
             <Route path="/kayit" element={<SignUp />} />
-            <Route path="/profil" element={<Profile />} />
+            <Route path="/profil" element={<Overview />} />
+            <Route path="/profil/listeler" element={<Lists />} />
+            <Route path="/profil/listeler/:id" element={<ListDetail />} />
+            <Route path="/profil/tamamlanan" element={<Completed />} />
+            <Route path="/profil/takip" element={<Following />} />
+            <Route path="/profil/ayarlar" element={<Settings />} />
+            <Route path="/profil/ayarlar/bildirim" element={<NotificationSettings />} />
+            <Route path="/profil/ayarlar/icerik" element={<ContentPreferences />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

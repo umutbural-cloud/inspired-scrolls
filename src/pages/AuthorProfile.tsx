@@ -1,7 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams, Navigate, Link } from "react-router-dom";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { findAuthor, articlesByAuthor } from "@/data/mock";
+import { useAuth } from "@/context/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 const filters = ["Tümü", "Araştırma", "Kolektif", "Deneme"] as const;
 
@@ -10,6 +13,44 @@ const AuthorProfile = () => {
   const author = slug ? findAuthor(slug) : undefined;
   const [filter, setFilter] = useState<(typeof filters)[number]>("Tümü");
   const [following, setFollowing] = useState(false);
+  const { user } = useAuth();
+
+  useEffect(() => {
+    if (!user || !author) return;
+    (async () => {
+      const { data } = await supabase
+        .from("author_follows")
+        .select("author_slug")
+        .eq("user_id", user.id)
+        .eq("author_slug", author.slug)
+        .maybeSingle();
+      setFollowing(Boolean(data));
+    })();
+  }, [user, author]);
+
+  const toggleFollow = async () => {
+    if (!user || !author) {
+      toast("Yazar takip etmek için giriş yap.");
+      return;
+    }
+    if (following) {
+      setFollowing(false);
+      await supabase
+        .from("author_follows")
+        .delete()
+        .eq("user_id", user.id)
+        .eq("author_slug", author.slug);
+    } else {
+      setFollowing(true);
+      const { error } = await supabase
+        .from("author_follows")
+        .insert({ user_id: user.id, author_slug: author.slug });
+      if (error) {
+        setFollowing(false);
+        toast.error(error.message);
+      }
+    }
+  };
 
   if (!author) return <Navigate to="/" replace />;
 
@@ -35,7 +76,7 @@ const AuthorProfile = () => {
                 {author.longBio}
               </p>
               <button
-                onClick={() => setFollowing((v) => !v)}
+                onClick={toggleFollow}
                 className={`mt-7 px-6 py-2.5 text-sm border transition-colors ${
                   following
                     ? "border-foreground bg-foreground text-background"
