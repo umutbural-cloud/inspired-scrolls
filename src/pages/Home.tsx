@@ -24,17 +24,17 @@ const Home = () => {
                 <h1 className="font-display text-4xl md:text-5xl lg:text-6xl leading-[1.02] tracking-tight text-balance">
                   {featured.title}
                 </h1>
-                <p className="mt-6 text-xl md:text-2xl font-serif-body leading-snug text-muted-foreground text-balance">
+                <p className="mt-5 text-lg md:text-xl leading-snug text-muted-foreground text-balance max-w-xl">
                   {featured.subtitle}
                 </p>
               </Link>
-              <p className="mt-6 text-base md:text-lg leading-relaxed text-foreground/85 max-w-xl text-pretty">
+              <p className="mt-5 text-[0.98rem] md:text-base leading-relaxed text-foreground/80 max-w-xl text-pretty">
                 {featured.excerpt}
               </p>
               <div className="mt-8 flex items-center gap-5 flex-wrap">
                 <Link
                   to={`/yazi/${featured.slug}`}
-                  className="inline-flex items-center gap-2 text-sm font-serif-body border-b border-foreground pb-1 hover:gap-3 transition-all"
+                  className="inline-flex items-center gap-2 text-sm font-medium px-4 h-10 bg-foreground text-background hover:bg-foreground/90 transition-colors rounded-md"
                 >
                   Okumaya başla <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.5} />
                 </Link>
@@ -110,13 +110,13 @@ const Home = () => {
       {/* Manifesto banner */}
       <section className="border-y border-hairline bg-surface-sunken/40">
         <div className="content-column px-6 py-20 md:py-28 text-center">
-          <span className="eyebrow text-accent">Manifesto</span>
-          <p className="mt-6 font-display text-3xl md:text-4xl lg:text-5xl leading-tight text-balance">
-            "Yavaşça okumak, çağdaş bir cesarettir.
-            Bir cümlenin önünde durabilmek, bir hayatı yeniden okumakla aynı şeydir."
+          <span className="eyebrow text-accent">Yaklaşımımız</span>
+          <p className="mt-6 font-display font-semibold text-3xl md:text-4xl lg:text-[2.75rem] leading-[1.15] tracking-tight text-balance max-w-3xl mx-auto">
+            Kişisel gelişim hızlı tüketilen bir tavsiye değildir.
+            Düşünmek, denemek ve uygulamak için zaman ister.
           </p>
-          <div className="mt-8 text-sm text-muted-foreground font-mono-jb tracking-wider">
-            — GELİŞİM YOLCULARI
+          <div className="mt-8 text-xs text-muted-foreground font-mono-jb tracking-wider">
+            DÜŞÜN · UYGULA · İLERLE
           </div>
         </div>
       </section>
@@ -133,8 +133,8 @@ const Home = () => {
               Araştırmalar
             </h3>
             <p className="mt-4 text-sm text-muted-foreground leading-relaxed max-w-sm">
-              Kıdemli yazarlardan, kaynaklara dayalı derinlemesine incelemeler.
-              Her yazı bir metodoloji notu ve kaynakça ile birlikte gelir.
+              Kanıta dayalı, derinlemesine incelemeler. Her yazı kaynakları ve
+              uygulanabilir çıkarımlarıyla birlikte gelir.
             </p>
             <span className="mt-6 inline-flex items-center gap-2 text-sm border-b border-foreground/40 pb-0.5 group-hover:border-accent group-hover:text-accent transition-colors">
               Tüm araştırmalar <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.5} />
@@ -149,8 +149,8 @@ const Home = () => {
               Kolektif
             </h3>
             <p className="mt-4 text-sm text-muted-foreground leading-relaxed max-w-sm">
-              Yazarların kişisel deneyim ve gözlemlerine dayanan yazılar —
-              farklı hayatların yan yana geldiği bir mozaik.
+              Yazarların ilk elden deneyim ve denemelerine dayanan yazılar.
+              Pratiğin içinden gelen sesler.
             </p>
             <span className="mt-6 inline-flex items-center gap-2 text-sm border-b border-foreground/40 pb-0.5 group-hover:border-accent group-hover:text-accent transition-colors">
               Tüm kolektif <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.5} />
