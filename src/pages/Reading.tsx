@@ -254,7 +254,6 @@ const Reading = () => {
               }`}
               style={{
                 width: `${HANDLE}px`,
-                transform: `translateX(calc((100% - ${HANDLE}px) * 0 + (var(--track-w, 0px))))`,
                 left: `calc((100% - ${HANDLE}px) * ${drag})`,
                 transition: draggingRef.current ? "none" : "left 250ms ease-out",
               }}
