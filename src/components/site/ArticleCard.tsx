@@ -33,7 +33,7 @@ export const ArticleCard = forwardRef<HTMLAnchorElement, ArticleCardProps>(({
 
   if (variant === "compact") {
     return (
-      <Link to={`/yazi/${article.slug}`} className="article-card group flex gap-4 items-start">
+      <Link ref={ref} to={`/yazi/${article.slug}`} className="article-card group flex gap-4 items-start">
         <div className="flex-1 min-w-0">
           <span className="eyebrow text-accent">{article.category}</span>
           <h3 className="card-title font-display text-lg leading-snug mt-1 text-balance">
@@ -56,7 +56,7 @@ export const ArticleCard = forwardRef<HTMLAnchorElement, ArticleCardProps>(({
   }
 
   return (
-    <Link to={`/yazi/${article.slug}`} className="article-card group block">
+    <Link ref={ref} to={`/yazi/${article.slug}`} className="article-card group block">
       <div className="aspect-[4/3] overflow-hidden bg-secondary mb-5">
         <img
           src={article.cover}
