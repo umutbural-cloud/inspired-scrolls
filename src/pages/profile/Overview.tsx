@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Flame, BookOpen, Clock, ArrowRight } from "lucide-react";
+import { Flame, BookOpen, Clock, ArrowRight, type LucideIcon } from "lucide-react";
 import { AccountGuard } from "@/components/site/AccountGuard";
 import { AccountLayout } from "@/components/site/AccountLayout";
 import { useAuth } from "@/context/AuthContext";
@@ -138,7 +138,7 @@ const StatCell = ({
   label,
   hint,
 }: {
-  icon: React.ComponentType<{ className?: string; strokeWidth?: number }>;
+  icon: LucideIcon;
   value: string;
   label: string;
   hint: string;
