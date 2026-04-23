@@ -286,26 +286,26 @@ const Reading = () => {
       />
 
       {/* Üst meta */}
-      <div className="reading-column px-6 pt-16 md:pt-24">
+      <div className="reading-column px-6 pt-10 md:pt-16">
         <Link
           to={`/kategori/${article.categorySlug}`}
           className="eyebrow text-accent link-quiet"
         >
           {article.category} · {article.kind}
         </Link>
-        <h1 className="mt-6 font-display text-4xl md:text-5xl lg:text-6xl leading-[1.05] tracking-tight text-balance">
+        <h1 className="mt-4 font-display text-3xl md:text-5xl lg:text-6xl leading-[1.05] tracking-tight text-balance">
           {article.title}
         </h1>
-        <p className="mt-6 text-xl md:text-2xl text-muted-foreground leading-snug text-balance">
+        <p className="mt-4 text-lg md:text-2xl text-muted-foreground leading-snug text-balance">
           {article.subtitle}
         </p>
 
-        <div className="mt-10 flex items-center justify-between flex-wrap gap-4 pb-10 border-b border-hairline">
+        <div className="mt-6 flex items-center justify-between flex-wrap gap-4 pb-6 border-b border-hairline">
           <Link to={`/yazar/${article.author.slug}`} className="flex items-center gap-3 group">
             <img
               src={article.author.avatar}
               alt={article.author.name}
-              className="w-12 h-12 rounded-full object-cover"
+              className="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover"
             />
             <div>
               <div className="text-sm font-medium group-hover:text-accent transition-colors">
@@ -317,37 +317,17 @@ const Reading = () => {
             </div>
           </Link>
 
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setLiked((v) => !v)}
-              className={`p-2.5 border border-hairline transition-colors ${
-                liked ? "bg-accent text-accent-foreground border-accent" : "hover:bg-surface-sunken"
-              }`}
-              aria-label="Beğen"
-            >
-              <Heart className="h-4 w-4" strokeWidth={1.5} fill={liked ? "currentColor" : "none"} />
-            </button>
-            <button
-              onClick={toggleSave}
-              className={`p-2.5 border border-hairline transition-colors ${
-                saved ? "bg-foreground text-background border-foreground" : "hover:bg-surface-sunken"
-              }`}
-              aria-label="Kaydet"
-            >
-              <Bookmark className="h-4 w-4" strokeWidth={1.5} fill={saved ? "currentColor" : "none"} />
-            </button>
-            <button
-              className="p-2.5 border border-hairline hover:bg-surface-sunken transition-colors"
-              aria-label="Paylaş"
-            >
-              <Share2 className="h-4 w-4" strokeWidth={1.5} />
-            </button>
-          </div>
+          <button
+            className="p-2 border border-hairline hover:bg-surface-sunken transition-colors rounded-md"
+            aria-label="Paylaş"
+          >
+            <Share2 className="h-4 w-4" strokeWidth={1.5} />
+          </button>
         </div>
       </div>
 
       {/* Kapak görseli */}
-      <figure className="content-column px-0 md:px-6 mt-10">
+      <figure className="content-column px-0 md:px-6 mt-6">
         <div className="aspect-[16/9] overflow-hidden bg-secondary">
           <img
             src={article.cover}
@@ -360,13 +340,13 @@ const Reading = () => {
       </figure>
 
       {/* İçindekiler */}
-      <div className="reading-column px-6 mt-14">
-        <details className="group border-y border-hairline py-5" open>
+      <div className="reading-column px-6 mt-8">
+        <details className="group border-y border-hairline py-4">
           <summary className="cursor-pointer flex items-center justify-between list-none">
             <span className="eyebrow">İçindekiler</span>
             <span className="text-xs text-muted-foreground group-open:rotate-180 transition-transform">▾</span>
           </summary>
-          <ol className="mt-4 space-y-2">
+          <ol className="mt-3 space-y-1.5">
             {article.toc.map((t) => (
               <li key={t.id} className="text-sm">
                 <a href={`#${t.id}`} className="text-muted-foreground hover:text-accent transition-colors">
@@ -379,25 +359,47 @@ const Reading = () => {
       </div>
 
       {/* İçerik */}
-      <article className="reading-column px-6 mt-14 prose-reading">
+      <article ref={articleRef} className="reading-column px-6 mt-8 prose-reading">
         {article.body.map((p, i) => (
           <p key={i} className={i === 0 ? "first-letter:font-display first-letter:text-foreground text-lg" : ""}>
-            {p}
+            {renderWithHighlights(p, `p-${i}`)}
           </p>
         ))}
         <h2 id="ii">II — Sayfanın geometrisi</h2>
-        <p>{article.body[1]}</p>
+        <p>{renderWithHighlights(article.body[1], "p-ii")}</p>
         <blockquote>
           "Bir kelimeyi anlamak için, onun etrafında dönülen mesafeyi yürümek
           gerekir." — Maurice Blanchot
         </blockquote>
-        <p>{article.body[2]}</p>
+        <p>{renderWithHighlights(article.body[2], "p-bq")}</p>
         <h2 id="iii">III — Sonuç</h2>
-        <p>{article.body[3]}</p>
+        <p>{renderWithHighlights(article.body[3], "p-iii")}</p>
       </article>
 
+      {/* Seçim popover'ı — vurgula */}
+      {selectionRect && (
+        <button
+          type="button"
+          onMouseDown={(e) => {
+            // mousedown ile seçimi kaybetmeden yakala
+            e.preventDefault();
+            addHighlightFromSelection();
+          }}
+          className="fixed z-50 inline-flex items-center gap-1.5 px-3 h-9 bg-foreground text-background text-xs font-medium rounded-md shadow-lg hover:bg-foreground/90 transition-colors"
+          style={{
+            left: selectionRect.x,
+            top: selectionRect.y - 44,
+            transform: "translateX(-50%)",
+            position: "absolute",
+          }}
+        >
+          <Highlighter className="h-3.5 w-3.5" strokeWidth={1.5} />
+          Vurgula
+        </button>
+      )}
+
       {/* Etiketler */}
-      <div className="reading-column px-6 mt-16">
+      <div className="reading-column px-6 mt-10">
         <div className="flex flex-wrap gap-2">
           {article.tags.map((t) => {
             const slug = allTags.find((x) => x.name === t)?.slug ?? t;
@@ -405,7 +407,7 @@ const Reading = () => {
               <Link
                 key={t}
                 to={`/etiket/${slug}`}
-                className="text-xs px-3 py-1.5 border border-hairline hover:border-accent hover:text-accent transition-colors"
+                className="text-xs px-3 py-1.5 border border-hairline hover:border-accent hover:text-accent transition-colors rounded-md"
               >
                 #{t}
               </Link>
@@ -414,14 +416,129 @@ const Reading = () => {
         </div>
       </div>
 
+      {/* Aksiyon barı — Beğen / Kaydet / Paylaş */}
+      <div className="reading-column px-6 mt-10">
+        <div className="flex items-center justify-center gap-3 py-5 border-y border-hairline">
+          <button
+            onClick={() => setLiked((v) => !v)}
+            className={`inline-flex items-center gap-2 px-4 h-10 border rounded-md text-sm transition-colors ${
+              liked
+                ? "bg-accent text-accent-foreground border-accent"
+                : "border-hairline hover:bg-surface-sunken"
+            }`}
+          >
+            <Heart className="h-4 w-4" strokeWidth={1.5} fill={liked ? "currentColor" : "none"} />
+            {liked ? "Beğenildi" : "Beğen"}
+          </button>
+          <button
+            onClick={toggleSave}
+            className={`inline-flex items-center gap-2 px-4 h-10 border rounded-md text-sm transition-colors ${
+              saved
+                ? "bg-foreground text-background border-foreground"
+                : "border-hairline hover:bg-surface-sunken"
+            }`}
+          >
+            <Bookmark className="h-4 w-4" strokeWidth={1.5} fill={saved ? "currentColor" : "none"} />
+            {saved ? "Kaydedildi" : "Kaydet"}
+          </button>
+          <button
+            className="inline-flex items-center gap-2 px-4 h-10 border border-hairline rounded-md text-sm hover:bg-surface-sunken transition-colors"
+            aria-label="Paylaş"
+          >
+            <Share2 className="h-4 w-4" strokeWidth={1.5} />
+            <span className="hidden sm:inline">Paylaş</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Vurgular paneli */}
+      {highlights.length > 0 && (
+        <div className="reading-column px-6 mt-10">
+          <div className="flex items-center gap-2 mb-4">
+            <Highlighter className="h-4 w-4 text-accent" strokeWidth={1.5} />
+            <span className="eyebrow">Vurguların ({highlights.length})</span>
+          </div>
+          <ul className="space-y-2">
+            {highlights.map((h) => (
+              <li
+                key={h.id}
+                className="group flex items-start gap-3 p-3 border border-hairline rounded-md bg-surface-sunken/30"
+              >
+                <span className="flex-1 text-sm leading-relaxed text-foreground/90">
+                  <span className="bg-accent/20 px-1 rounded-sm">{h.text}</span>
+                </span>
+                <button
+                  onClick={() => removeHighlight(h.id)}
+                  className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-destructive transition-all p-1"
+                  aria-label="Vurguyu sil"
+                >
+                  <Trash2 className="h-3.5 w-3.5" strokeWidth={1.5} />
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {/* Notlar */}
+      <div className="reading-column px-6 mt-10">
+        <div className="flex items-center gap-2 mb-4">
+          <NotebookPen className="h-4 w-4 text-accent" strokeWidth={1.5} />
+          <span className="eyebrow">Notların ({notes.length})</span>
+        </div>
+        <div className="border border-hairline rounded-md p-3 bg-background">
+          <textarea
+            value={noteDraft}
+            onChange={(e) => setNoteDraft(e.target.value)}
+            placeholder="Bu yazı için bir not yaz…"
+            rows={3}
+            className="w-full resize-none bg-transparent outline-none text-sm leading-relaxed placeholder:text-muted-foreground"
+          />
+          <div className="flex items-center justify-between pt-2 mt-2 border-t border-hairline">
+            <span className="text-xs text-muted-foreground">
+              Notların yalnızca bu cihazda saklanır.
+            </span>
+            <button
+              onClick={addNote}
+              disabled={!noteDraft.trim()}
+              className="inline-flex items-center gap-1.5 px-3 h-8 bg-foreground text-background rounded-md text-xs font-medium disabled:opacity-40 hover:bg-foreground/90 transition-colors"
+            >
+              <Plus className="h-3.5 w-3.5" strokeWidth={2} />
+              Not ekle
+            </button>
+          </div>
+        </div>
+        {notes.length > 0 && (
+          <ul className="mt-4 space-y-2">
+            {notes.map((n) => (
+              <li
+                key={n.id}
+                className="group flex items-start gap-3 p-3 border border-hairline rounded-md"
+              >
+                <p className="flex-1 text-sm leading-relaxed whitespace-pre-wrap text-foreground/90">
+                  {n.text}
+                </p>
+                <button
+                  onClick={() => removeNote(n.id)}
+                  className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-destructive transition-all p-1"
+                  aria-label="Notu sil"
+                >
+                  <Trash2 className="h-3.5 w-3.5" strokeWidth={1.5} />
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+
       {/* Yazıyı tamamla */}
-      <div className="reading-column px-6 mt-20">
-        <div className="border border-hairline p-8 text-center bg-surface-sunken/30">
+      <div className="reading-column px-6 mt-10">
+        <div className="border border-hairline rounded-md p-6 text-center bg-surface-sunken/30">
           <span className="eyebrow text-accent">{completed ? "Tamamlandı" : "Yazıyı Tamamla"}</span>
-          <p className="mt-3 font-display text-2xl text-balance">
+          <p className="mt-2 font-display text-xl md:text-2xl text-balance">
             {completed ? "Bu yazı arşivine eklendi" : "Okudukların burada birikiyor"}
           </p>
-          <p className="mt-2 text-sm text-muted-foreground">
+          <p className="mt-1.5 text-sm text-muted-foreground">
             {completed
               ? "Tamamladığın yazılar profilinde görünür."
               : "Tutamacı sağa sürükle — bu yazıyı tamamladıklarına ekle."}
@@ -429,7 +546,7 @@ const Reading = () => {
 
           <div
             ref={trackRef}
-            className={`mt-6 mx-auto max-w-sm h-12 border relative overflow-hidden select-none touch-none ${
+            className={`mt-5 mx-auto max-w-sm h-12 border rounded-md relative overflow-hidden select-none touch-none ${
               completed ? "border-accent bg-accent/10" : "border-foreground/30"
             }`}
             onPointerMove={(e) => moveDrag(e.clientX)}
@@ -482,20 +599,20 @@ const Reading = () => {
       </div>
 
       {/* Yazar kartı */}
-      <div className="reading-column px-6 mt-20 pt-10 border-t border-hairline">
+      <div className="reading-column px-6 mt-12 pt-8 border-t border-hairline">
         <Link to={`/yazar/${article.author.slug}`} className="flex gap-5 items-start group">
           <img
             src={article.author.avatar}
             alt={article.author.name}
-            className="w-16 h-16 rounded-full object-cover shrink-0"
+            className="w-14 h-14 md:w-16 md:h-16 rounded-full object-cover shrink-0"
           />
           <div>
             <span className="eyebrow">Yazar</span>
-            <div className="font-display text-xl mt-1 group-hover:text-accent transition-colors">
+            <div className="font-display text-lg md:text-xl mt-1 group-hover:text-accent transition-colors">
               {article.author.name}
             </div>
-            <p className="mt-2 text-muted-foreground leading-relaxed">{article.author.bio}</p>
-            <span className="inline-flex items-center gap-2 mt-3 text-sm border-b border-foreground/40 pb-0.5 group-hover:border-accent group-hover:text-accent transition-colors">
+            <p className="mt-1.5 text-sm md:text-base text-muted-foreground leading-relaxed">{article.author.bio}</p>
+            <span className="inline-flex items-center gap-2 mt-2.5 text-sm border-b border-foreground/40 pb-0.5 group-hover:border-accent group-hover:text-accent transition-colors">
               Yazarın profili <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.5} />
             </span>
           </div>
@@ -503,14 +620,14 @@ const Reading = () => {
       </div>
 
       {/* Önerilenler */}
-      <section className="wide-column px-6 mt-24 pt-12 border-t border-hairline">
-        <div className="flex items-baseline justify-between mb-10">
-          <h2 className="font-display text-3xl">Devam Etmek İçin</h2>
+      <section className="wide-column px-6 mt-12 md:mt-16 pt-8 border-t border-hairline">
+        <div className="flex items-baseline justify-between mb-6 md:mb-8">
+          <h2 className="font-display text-2xl md:text-3xl">Devam Etmek İçin</h2>
           <Link to="/" className="text-sm link-quiet text-muted-foreground inline-flex items-center gap-2">
             <ArrowLeft className="h-3.5 w-3.5" /> Ana sayfa
           </Link>
         </div>
-        <div className="grid md:grid-cols-3 gap-x-10 gap-y-12 pb-16">
+        <div className="grid md:grid-cols-3 gap-x-10 gap-y-10 pb-12">
           {recommended.map((a) => (
             <ArticleCard key={a.slug} article={a} />
           ))}
