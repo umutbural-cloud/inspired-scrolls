@@ -101,6 +101,154 @@ export type Database = {
         }
         Relationships: []
       }
+      post_comments: {
+        Row: {
+          author_id: string
+          block_anchor: string | null
+          body: string
+          created_at: string
+          id: string
+          post_id: string
+        }
+        Insert: {
+          author_id: string
+          block_anchor?: string | null
+          body: string
+          created_at?: string
+          id?: string
+          post_id: string
+        }
+        Update: {
+          author_id?: string
+          block_anchor?: string | null
+          body?: string
+          created_at?: string
+          id?: string
+          post_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "post_comments_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      post_revisions: {
+        Row: {
+          after_content: Json
+          after_text: string
+          before_content: Json
+          before_text: string
+          created_at: string
+          editor_id: string
+          id: string
+          note: string | null
+          post_id: string
+          resolved_at: string | null
+          status: Database["public"]["Enums"]["revision_status"]
+        }
+        Insert: {
+          after_content: Json
+          after_text?: string
+          before_content: Json
+          before_text?: string
+          created_at?: string
+          editor_id: string
+          id?: string
+          note?: string | null
+          post_id: string
+          resolved_at?: string | null
+          status?: Database["public"]["Enums"]["revision_status"]
+        }
+        Update: {
+          after_content?: Json
+          after_text?: string
+          before_content?: Json
+          before_text?: string
+          created_at?: string
+          editor_id?: string
+          id?: string
+          note?: string | null
+          post_id?: string
+          resolved_at?: string | null
+          status?: Database["public"]["Enums"]["revision_status"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "post_revisions_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      posts: {
+        Row: {
+          author_id: string
+          category_slug: string | null
+          content: Json
+          content_text: string
+          cover_image_url: string | null
+          created_at: string
+          excerpt: string | null
+          id: string
+          meta_description: string | null
+          meta_title: string | null
+          og_image_url: string | null
+          published_at: string | null
+          read_minutes: number
+          slug: string | null
+          status: Database["public"]["Enums"]["post_status"]
+          tags: string[]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          author_id: string
+          category_slug?: string | null
+          content?: Json
+          content_text?: string
+          cover_image_url?: string | null
+          created_at?: string
+          excerpt?: string | null
+          id?: string
+          meta_description?: string | null
+          meta_title?: string | null
+          og_image_url?: string | null
+          published_at?: string | null
+          read_minutes?: number
+          slug?: string | null
+          status?: Database["public"]["Enums"]["post_status"]
+          tags?: string[]
+          title?: string
+          updated_at?: string
+        }
+        Update: {
+          author_id?: string
+          category_slug?: string | null
+          content?: Json
+          content_text?: string
+          cover_image_url?: string | null
+          created_at?: string
+          excerpt?: string | null
+          id?: string
+          meta_description?: string | null
+          meta_title?: string | null
+          og_image_url?: string | null
+          published_at?: string | null
+          read_minutes?: number
+          slug?: string | null
+          status?: Database["public"]["Enums"]["post_status"]
+          tags?: string[]
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -202,6 +350,27 @@ export type Database = {
         }
         Relationships: []
       }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -216,10 +385,26 @@ export type Database = {
           total_minutes: number
         }[]
       }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
       is_my_list: { Args: { _list_id: string }; Returns: boolean }
+      is_post_participant: { Args: { _post_id: string }; Returns: boolean }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "editor" | "writer" | "user"
+      post_status:
+        | "draft"
+        | "in_review"
+        | "changes_requested"
+        | "approved"
+        | "published"
+        | "rejected"
+      revision_status: "pending" | "accepted" | "rejected"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -346,6 +531,17 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "editor", "writer", "user"],
+      post_status: [
+        "draft",
+        "in_review",
+        "changes_requested",
+        "approved",
+        "published",
+        "rejected",
+      ],
+      revision_status: ["pending", "accepted", "rejected"],
+    },
   },
 } as const
