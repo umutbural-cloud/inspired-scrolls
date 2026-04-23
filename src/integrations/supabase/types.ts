@@ -14,6 +14,93 @@ export type Database = {
   }
   public: {
     Tables: {
+      author_follows: {
+        Row: {
+          author_slug: string
+          created_at: string
+          user_id: string
+        }
+        Insert: {
+          author_slug: string
+          created_at?: string
+          user_id: string
+        }
+        Update: {
+          author_slug?: string
+          created_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      completed_articles: {
+        Row: {
+          article_slug: string
+          completed_at: string
+          read_minutes: number
+          user_id: string
+        }
+        Insert: {
+          article_slug: string
+          completed_at?: string
+          read_minutes?: number
+          user_id: string
+        }
+        Update: {
+          article_slug?: string
+          completed_at?: string
+          read_minutes?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
+      content_preferences: {
+        Row: {
+          category_slug: string
+          created_at: string
+          user_id: string
+        }
+        Insert: {
+          category_slug: string
+          created_at?: string
+          user_id: string
+        }
+        Update: {
+          category_slug?: string
+          created_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      notification_preferences: {
+        Row: {
+          email_digest: boolean
+          notify_comments: boolean
+          notify_followed_author: boolean
+          notify_new_post: boolean
+          notify_system: boolean
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          email_digest?: boolean
+          notify_comments?: boolean
+          notify_followed_author?: boolean
+          notify_new_post?: boolean
+          notify_system?: boolean
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          email_digest?: boolean
+          notify_comments?: boolean
+          notify_followed_author?: boolean
+          notify_new_post?: boolean
+          notify_system?: boolean
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -44,12 +131,74 @@ export type Database = {
         }
         Relationships: []
       }
+      reading_list_items: {
+        Row: {
+          added_at: string
+          article_slug: string
+          list_id: string
+        }
+        Insert: {
+          added_at?: string
+          article_slug: string
+          list_id: string
+        }
+        Update: {
+          added_at?: string
+          article_slug?: string
+          list_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reading_list_items_list_id_fkey"
+            columns: ["list_id"]
+            isOneToOne: false
+            referencedRelation: "reading_lists"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reading_lists: {
+        Row: {
+          created_at: string
+          id: string
+          is_default: boolean
+          name: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_default?: boolean
+          name: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_default?: boolean
+          name?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_user_reading_stats: {
+        Args: { _user_id: string }
+        Returns: {
+          current_streak: number
+          last_completed_at: string
+          total_completed: number
+          total_minutes: number
+        }[]
+      }
+      is_my_list: { Args: { _list_id: string }; Returns: boolean }
     }
     Enums: {
       [_ in never]: never
