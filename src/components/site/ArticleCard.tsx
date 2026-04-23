@@ -1,16 +1,19 @@
+import { forwardRef } from "react";
 import { Link } from "react-router-dom";
 import type { Article } from "@/data/mock";
 
-export const ArticleCard = ({
-  article,
-  variant = "default",
-}: {
+type ArticleCardProps = {
   article: Article;
   variant?: "default" | "compact" | "minimal";
-}) => {
+};
+
+export const ArticleCard = forwardRef<HTMLAnchorElement, ArticleCardProps>(({
+  article,
+  variant = "default",
+}, ref) => {
   if (variant === "minimal") {
     return (
-      <Link to={`/yazi/${article.slug}`} className="article-card group block py-6 border-b border-hairline">
+      <Link ref={ref} to={`/yazi/${article.slug}`} className="article-card group block py-6 border-b border-hairline">
         <div className="flex items-baseline gap-3 mb-2">
           <span className="eyebrow text-accent">{article.kind}</span>
           <span className="text-xs text-muted-foreground">· {article.publishedAt}</span>
