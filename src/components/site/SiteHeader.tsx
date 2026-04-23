@@ -6,9 +6,6 @@ const nav = [
   { to: "/", label: "Ana Sayfa", end: true },
   { to: "/arastirmalar", label: "Araştırmalar" },
   { to: "/kolektif", label: "Kolektif" },
-  { to: "/kategori/dusunce", label: "Düşünce" },
-  { to: "/kategori/sehir", label: "Şehir" },
-  { to: "/kategori/edebiyat", label: "Edebiyat" },
 ];
 
 export const SiteHeader = () => {

@@ -57,7 +57,7 @@
     /* Okuma genişlikleri */
     --reading-width: 42rem;     /* ~680px */
     --content-width: 64rem;
-    --wide-width: 80rem;
+    --wide-width: 68.75rem;     /* 1100px — orta genişlik */
 
     /* Sidebar */
     --sidebar-background: 41 28% 95%;

@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useParams, Navigate } from "react-router-dom";
-import { Bookmark, Heart, Share2, ArrowRight, ArrowLeft } from "lucide-react";
+import { Bookmark, Heart, Share2, ArrowRight, ArrowLeft, Check } from "lucide-react";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { ArticleCard } from "@/components/site/ArticleCard";
 import { findArticle, articles } from "@/data/mock";
@@ -11,6 +11,12 @@ const Reading = () => {
   const [progress, setProgress] = useState(0);
   const [liked, setLiked] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [completed, setCompleted] = useState(false);
+  const [drag, setDrag] = useState(0); // 0..1
+  const trackRef = useRef<HTMLDivElement>(null);
+  const draggingRef = useRef(false);
+  const startXRef = useRef(0);
+  const startDragRef = useRef(0);
 
   useEffect(() => {
     const onScroll = () => {
@@ -24,6 +30,33 @@ const Reading = () => {
   }, [slug]);
 
   if (!article) return <Navigate to="/" replace />;
+
+  const HANDLE = 48; // px
+
+  const beginDrag = (clientX: number) => {
+    if (completed) return;
+    draggingRef.current = true;
+    startXRef.current = clientX;
+    startDragRef.current = drag;
+  };
+  const moveDrag = (clientX: number) => {
+    if (!draggingRef.current || !trackRef.current) return;
+    const trackW = trackRef.current.clientWidth;
+    const maxPx = trackW - HANDLE;
+    const deltaPx = (clientX - startXRef.current) + startDragRef.current * maxPx;
+    const next = Math.max(0, Math.min(1, deltaPx / maxPx));
+    setDrag(next);
+  };
+  const endDrag = () => {
+    if (!draggingRef.current) return;
+    draggingRef.current = false;
+    if (drag > 0.92) {
+      setDrag(1);
+      setCompleted(true);
+    } else {
+      setDrag(0);
+    }
+  };
 
   const recommended = articles
     .filter((a) => a.slug !== article.slug)
@@ -167,20 +200,66 @@ const Reading = () => {
       {/* Yazıyı tamamla */}
       <div className="reading-column px-6 mt-20">
         <div className="border border-hairline p-8 text-center bg-surface-sunken/30">
-          <span className="eyebrow text-accent">Yazıyı Tamamla</span>
+          <span className="eyebrow text-accent">{completed ? "Tamamlandı" : "Yazıyı Tamamla"}</span>
           <p className="mt-3 font-display text-2xl text-balance">
-            Okudukların burada birikiyor
+            {completed ? "Bu yazı arşivine eklendi" : "Okudukların burada birikiyor"}
           </p>
           <p className="mt-2 text-sm text-muted-foreground">
-            Sağa kaydır — bu yazıyı tamamladıklarına ekle.
+            {completed
+              ? "Tamamladığın yazılar profilinde görünür."
+              : "Tutamacı sağa sürükle — bu yazıyı tamamladıklarına ekle."}
           </p>
-          <div className="mt-6 mx-auto max-w-sm h-12 border border-foreground/30 relative overflow-hidden flex items-center px-2 cursor-pointer group hover:border-foreground transition-colors">
-            <div className="absolute inset-y-0 left-0 w-12 bg-foreground text-background flex items-center justify-center group-hover:w-full transition-all duration-700 ease-out">
-              <ArrowRight className="h-4 w-4" strokeWidth={1.5} />
-            </div>
-            <span className="ml-16 text-sm text-muted-foreground group-hover:opacity-0 transition-opacity">
-              Kaydır ve tamamla
+
+          <div
+            ref={trackRef}
+            className={`mt-6 mx-auto max-w-sm h-12 border relative overflow-hidden select-none touch-none ${
+              completed ? "border-accent bg-accent/10" : "border-foreground/30"
+            }`}
+            onPointerMove={(e) => moveDrag(e.clientX)}
+            onPointerUp={endDrag}
+            onPointerLeave={endDrag}
+            onPointerCancel={endDrag}
+          >
+            <div
+              className="absolute inset-y-0 left-0 bg-foreground/8"
+              style={{
+                width: `calc(${HANDLE}px + (100% - ${HANDLE}px) * ${drag})`,
+                transition: draggingRef.current ? "none" : "width 250ms ease-out",
+              }}
+              aria-hidden
+            />
+            <span
+              className={`absolute inset-0 flex items-center justify-center text-sm pointer-events-none transition-opacity ${
+                completed ? "opacity-0" : ""
+              }`}
+              style={{ opacity: 1 - drag }}
+            >
+              <span className="ml-12 text-muted-foreground">Kaydır ve tamamla</span>
             </span>
+            {completed && (
+              <span className="absolute inset-0 flex items-center justify-center text-sm font-mono-jb tracking-wider text-accent">
+                <Check className="h-4 w-4 mr-2" strokeWidth={2} /> TAMAMLANDI
+              </span>
+            )}
+            <button
+              type="button"
+              aria-label="Kaydır ve tamamla"
+              disabled={completed}
+              onPointerDown={(e) => {
+                (e.target as HTMLElement).setPointerCapture(e.pointerId);
+                beginDrag(e.clientX);
+              }}
+              className={`absolute top-0 bottom-0 flex items-center justify-center text-background ${
+                completed ? "bg-accent cursor-default" : "bg-foreground cursor-grab active:cursor-grabbing"
+              }`}
+              style={{
+                width: `${HANDLE}px`,
+                left: `calc((100% - ${HANDLE}px) * ${drag})`,
+                transition: draggingRef.current ? "none" : "left 250ms ease-out",
+              }}
+            >
+              {completed ? <Check className="h-4 w-4" strokeWidth={2} /> : <ArrowRight className="h-4 w-4" strokeWidth={1.5} />}
+            </button>
           </div>
         </div>
       </div>

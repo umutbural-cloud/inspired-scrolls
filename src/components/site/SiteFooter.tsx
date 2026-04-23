@@ -18,7 +18,6 @@ export const SiteFooter = () => (
         <ul className="space-y-2 text-sm">
           <li><Link to="/arastirmalar" className="link-quiet">Araştırmalar</Link></li>
           <li><Link to="/kolektif" className="link-quiet">Kolektif</Link></li>
-          <li><Link to="/kategori/dusunce" className="link-quiet">Kategoriler</Link></li>
           <li><Link to="/yazarlar" className="link-quiet">Yazarlar</Link></li>
         </ul>
       </div>

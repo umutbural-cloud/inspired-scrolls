@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useParams, Navigate, Link } from "react-router-dom";
 import { SiteLayout } from "@/components/site/SiteLayout";
-import { ArticleCard } from "@/components/site/ArticleCard";
 import { findAuthor, articlesByAuthor } from "@/data/mock";
 
 const filters = ["Tümü", "Araştırma", "Kolektif", "Deneme"] as const;
@@ -83,11 +82,40 @@ const AuthorProfile = () => {
             Bu kategoride henüz yazı yok.
           </p>
         ) : (
-          <div className="grid md:grid-cols-2 gap-x-10 gap-y-14">
+          <ul className="divide-y divide-hairline border-y border-hairline">
             {filtered.map((a) => (
-              <ArticleCard key={a.slug} article={a} />
+              <li key={a.slug}>
+                <Link
+                  to={`/yazi/${a.slug}`}
+                  className="group flex gap-6 md:gap-8 py-7 items-start"
+                >
+                  <div className="w-28 h-28 md:w-36 md:h-36 shrink-0 overflow-hidden bg-secondary">
+                    <img
+                      src={a.cover}
+                      alt=""
+                      loading="lazy"
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+                    />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-baseline gap-3">
+                      <span className="eyebrow text-accent">{a.kind}</span>
+                      <span className="text-xs text-muted-foreground">· {a.publishedAt}</span>
+                    </div>
+                    <h3 className="mt-2 font-display text-2xl md:text-[1.65rem] leading-snug group-hover:text-accent transition-colors text-balance">
+                      {a.title}
+                    </h3>
+                    <p className="mt-2 text-muted-foreground leading-relaxed text-pretty line-clamp-2">
+                      {a.excerpt}
+                    </p>
+                    <div className="mt-3 text-xs text-muted-foreground font-mono-jb tracking-wider">
+                      {a.readMinutes} DK OKUMA
+                    </div>
+                  </div>
+                </Link>
+              </li>
             ))}
-          </div>
+          </ul>
         )}
       </section>
     </SiteLayout>

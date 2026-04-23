@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { ArticleCard } from "@/components/site/ArticleCard";
-import { featured, recent, popular, articles, categories } from "@/data/mock";
+import { featured, recent, popular, articles } from "@/data/mock";
 import heroImg from "@/assets/hero-feature.jpg";
 
 const Home = () => {
@@ -11,8 +11,8 @@ const Home = () => {
       {/* Hero — Bugünün Yazısı */}
       <section className="border-b border-hairline">
         <div className="wide-column px-6 pt-16 pb-20 md:pt-20 md:pb-24">
-          <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-end">
-            <div className="lg:col-span-7 animate-fade-up">
+          <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+            <div className="lg:col-span-7 animate-fade-up order-2 lg:order-1">
               <div className="flex items-center gap-3 mb-6">
                 <span className="eyebrow text-accent">Bugünün Yazısı</span>
                 <span className="h-px w-16 bg-hairline" />
@@ -21,17 +21,17 @@ const Home = () => {
                 </span>
               </div>
               <Link to={`/yazi/${featured.slug}`} className="group block">
-                <h1 className="font-display text-5xl md:text-6xl lg:text-7xl leading-[0.98] tracking-tight text-balance">
+                <h1 className="font-display text-4xl md:text-5xl lg:text-6xl leading-[1.02] tracking-tight text-balance">
                   {featured.title}
                 </h1>
                 <p className="mt-6 text-xl md:text-2xl font-serif-body italic leading-snug text-muted-foreground text-balance">
                   {featured.subtitle}
                 </p>
               </Link>
-              <p className="mt-7 text-lg leading-relaxed text-foreground/85 max-w-2xl text-pretty">
+              <p className="mt-6 text-base md:text-lg leading-relaxed text-foreground/85 max-w-xl text-pretty">
                 {featured.excerpt}
               </p>
-              <div className="mt-8 flex items-center gap-5">
+              <div className="mt-8 flex items-center gap-5 flex-wrap">
                 <Link
                   to={`/yazi/${featured.slug}`}
                   className="inline-flex items-center gap-2 text-sm font-serif-body border-b border-foreground pb-1 hover:gap-3 transition-all"
@@ -44,9 +44,9 @@ const Home = () => {
               </div>
             </div>
 
-            <div className="lg:col-span-5 animate-scale-in">
+            <div className="lg:col-span-5 animate-scale-in order-1 lg:order-2">
               <Link to={`/yazi/${featured.slug}`} className="block group">
-                <div className="aspect-[4/5] overflow-hidden bg-secondary">
+                <div className="aspect-[3/4] overflow-hidden bg-secondary">
                   <img
                     src={heroImg}
                     alt={featured.title}
@@ -121,34 +121,45 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Kategoriler şeridi */}
+      {/* İki şerit — Araştırmalar & Kolektif */}
       <section className="wide-column px-6 py-20 md:py-24">
-        <div className="flex items-baseline justify-between mb-10">
-          <h2 className="font-display text-3xl md:text-4xl">Kategoriler</h2>
-          <span className="text-xs text-muted-foreground font-mono-jb">{categories.length} alan</span>
-        </div>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-px bg-hairline border border-hairline">
-          {categories.map((c) => (
-            <Link
-              key={c.slug}
-              to={`/kategori/${c.slug}`}
-              className="group bg-background p-8 hover:bg-surface-sunken transition-colors"
-            >
-              <div className="flex items-baseline justify-between">
-                <h3 className="font-display text-2xl group-hover:text-accent transition-colors">
-                  {c.name}
-                </h3>
-                <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-accent group-hover:translate-x-1 transition-all" strokeWidth={1.5} />
-              </div>
-              <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
-                {c.description}
-              </p>
-            </Link>
-          ))}
+        <div className="grid md:grid-cols-2 gap-px bg-hairline border border-hairline">
+          <Link
+            to="/arastirmalar"
+            className="group bg-background p-10 md:p-12 hover:bg-surface-sunken transition-colors"
+          >
+            <span className="eyebrow text-accent">Bölüm</span>
+            <h3 className="mt-3 font-display text-3xl md:text-4xl group-hover:text-accent transition-colors">
+              Araştırmalar
+            </h3>
+            <p className="mt-4 text-sm text-muted-foreground leading-relaxed max-w-sm">
+              Kıdemli yazarlardan, kaynaklara dayalı derinlemesine incelemeler.
+              Her yazı bir metodoloji notu ve kaynakça ile birlikte gelir.
+            </p>
+            <span className="mt-6 inline-flex items-center gap-2 text-sm border-b border-foreground/40 pb-0.5 group-hover:border-accent group-hover:text-accent transition-colors">
+              Tüm araştırmalar <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.5} />
+            </span>
+          </Link>
+          <Link
+            to="/kolektif"
+            className="group bg-background p-10 md:p-12 hover:bg-surface-sunken transition-colors"
+          >
+            <span className="eyebrow text-accent">Bölüm</span>
+            <h3 className="mt-3 font-display text-3xl md:text-4xl group-hover:text-accent transition-colors">
+              Kolektif
+            </h3>
+            <p className="mt-4 text-sm text-muted-foreground leading-relaxed max-w-sm">
+              Yazarların kişisel deneyim ve gözlemlerine dayanan yazılar —
+              farklı hayatların yan yana geldiği bir mozaik.
+            </p>
+            <span className="mt-6 inline-flex items-center gap-2 text-sm border-b border-foreground/40 pb-0.5 group-hover:border-accent group-hover:text-accent transition-colors">
+              Tüm kolektif <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.5} />
+            </span>
+          </Link>
         </div>
       </section>
 
-      {/* Tüm yazılar şeridi */}
+      {/* Arşivden */}
       <section className="wide-column px-6 pb-20">
         <div className="flex items-baseline justify-between mb-8 pt-12 border-t border-hairline">
           <h2 className="font-display text-2xl">Arşivden</h2>
