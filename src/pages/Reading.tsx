@@ -22,6 +22,44 @@ const Reading = () => {
   const startXRef = useRef(0);
   const startDragRef = useRef(0);
 
+  // Highlights (kullanıcı seçimleri)
+  type Highlight = { id: string; text: string; createdAt: number };
+  const [highlights, setHighlights] = useState<Highlight[]>([]);
+  const [selectionRect, setSelectionRect] = useState<{ x: number; y: number } | null>(null);
+  const [pendingSelection, setPendingSelection] = useState<string>("");
+  const articleRef = useRef<HTMLElement>(null);
+
+  // Notlar
+  type Note = { id: string; text: string; createdAt: number };
+  const [notes, setNotes] = useState<Note[]>([]);
+  const [noteDraft, setNoteDraft] = useState("");
+
+  const hlKey = useMemo(() => (article ? `hl:${article.slug}` : ""), [article?.slug]);
+  const noteKey = useMemo(() => (article ? `notes:${article.slug}` : ""), [article?.slug]);
+
+  // Local storage'tan yükle
+  useEffect(() => {
+    if (!hlKey) return;
+    try {
+      const h = JSON.parse(localStorage.getItem(hlKey) || "[]");
+      const n = JSON.parse(localStorage.getItem(noteKey) || "[]");
+      setHighlights(Array.isArray(h) ? h : []);
+      setNotes(Array.isArray(n) ? n : []);
+    } catch {
+      setHighlights([]);
+      setNotes([]);
+    }
+  }, [hlKey, noteKey]);
+
+  const persistHighlights = (next: Highlight[]) => {
+    setHighlights(next);
+    if (hlKey) localStorage.setItem(hlKey, JSON.stringify(next));
+  };
+  const persistNotes = (next: Note[]) => {
+    setNotes(next);
+    if (noteKey) localStorage.setItem(noteKey, JSON.stringify(next));
+  };
+
   useEffect(() => {
     const onScroll = () => {
       const h = document.documentElement;
