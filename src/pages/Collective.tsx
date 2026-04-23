@@ -31,7 +31,7 @@ const Collective = () => {
               <h1 className="mt-3 font-display text-5xl md:text-6xl tracking-tight leading-[1.02]">
                 Kolektif
               </h1>
-              <p className="mt-5 font-serif-body italic text-xl text-muted-foreground max-w-xl text-balance">
+              <p className="mt-5 text-xl text-muted-foreground max-w-xl text-balance">
                 Farklı hayatların, farklı seslerin yan yana geldiği bir mozaik —
                 kişisel deneyim ve gözlem üzerine yazılar.
               </p>

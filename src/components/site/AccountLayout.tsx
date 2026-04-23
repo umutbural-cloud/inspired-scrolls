@@ -99,7 +99,7 @@ export const AccountLayout = ({
                   {title}
                 </h1>
                 {description && (
-                  <p className="mt-3 font-serif-body italic text-muted-foreground max-w-xl text-pretty">
+                  <p className="mt-3 text-muted-foreground max-w-xl text-pretty">
                     {description}
                   </p>
                 )}

@@ -68,7 +68,7 @@ const SettingsInner = () => {
               value={profile.display_name ?? ""}
               onChange={(e) => setProfile({ ...profile, display_name: e.target.value })}
               placeholder="Elif Yıldırım"
-              className="w-full h-11 px-3 bg-transparent border border-hairline focus:border-foreground outline-none transition-colors text-base font-serif-body"
+              className="w-full h-11 px-3 bg-transparent border border-hairline focus:border-foreground outline-none transition-colors text-base "
             />
           </Field>
           <Field label="Kullanıcı adı">
@@ -77,7 +77,7 @@ const SettingsInner = () => {
               value={profile.username ?? ""}
               onChange={(e) => setProfile({ ...profile, username: e.target.value })}
               placeholder="elifyildirim"
-              className="w-full h-11 px-3 bg-transparent border border-hairline focus:border-foreground outline-none transition-colors text-base font-serif-body"
+              className="w-full h-11 px-3 bg-transparent border border-hairline focus:border-foreground outline-none transition-colors text-base "
             />
           </Field>
           <Field label="Profil fotoğrafı (URL)">
@@ -86,7 +86,7 @@ const SettingsInner = () => {
               value={profile.avatar_url ?? ""}
               onChange={(e) => setProfile({ ...profile, avatar_url: e.target.value })}
               placeholder="https://…"
-              className="w-full h-11 px-3 bg-transparent border border-hairline focus:border-foreground outline-none transition-colors text-base font-serif-body"
+              className="w-full h-11 px-3 bg-transparent border border-hairline focus:border-foreground outline-none transition-colors text-base "
             />
           </Field>
           <Field label="Biyografi">
@@ -95,7 +95,7 @@ const SettingsInner = () => {
               onChange={(e) => setProfile({ ...profile, bio: e.target.value })}
               rows={4}
               placeholder="Kısa bir tanıtım…"
-              className="w-full px-3 py-2.5 bg-transparent border border-hairline focus:border-foreground outline-none transition-colors text-base font-serif-body resize-none leading-relaxed"
+              className="w-full px-3 py-2.5 bg-transparent border border-hairline focus:border-foreground outline-none transition-colors text-base  resize-none leading-relaxed"
             />
           </Field>
 

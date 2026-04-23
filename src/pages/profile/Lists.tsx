@@ -121,7 +121,7 @@ const ListsInner = () => {
               value={newName}
               onChange={(e) => setNewName(e.target.value)}
               placeholder="Yeni liste adı (örn. Yaz Okumaları)"
-              className="flex-1 h-11 px-3 bg-transparent border border-hairline focus:border-foreground outline-none text-sm font-serif-body"
+              className="flex-1 h-11 px-3 bg-transparent border border-hairline focus:border-foreground outline-none text-sm "
             />
             <button
               type="submit"

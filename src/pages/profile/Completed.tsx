@@ -49,7 +49,7 @@ const CompletedInner = () => {
           <Loader2 className="h-4 w-4 animate-spin" /> Yükleniyor…
         </div>
       ) : rows.length === 0 ? (
-        <p className="text-muted-foreground italic py-12 text-center border-y border-hairline">
+        <p className="text-muted-foreground py-12 text-center border-y border-hairline">
           Henüz tamamladığın bir yazı yok.
         </p>
       ) : (

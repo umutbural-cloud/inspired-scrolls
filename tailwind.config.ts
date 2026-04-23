@@ -12,8 +12,9 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ["Playfair Display", "Iowan Old Style", "Georgia", "serif"],
-        serif: ["Source Serif 4", "Source Serif Pro", "Georgia", "serif"],
+        display: ["Fraunces", "Iowan Old Style", "Georgia", "serif"],
+        serif: ["Fraunces", "Iowan Old Style", "Georgia", "serif"],
+        sans: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
         mono: ["JetBrains Mono", "ui-monospace", "monospace"],
       },
       colors: {

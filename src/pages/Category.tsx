@@ -49,7 +49,7 @@ const Category = () => {
           <h1 className="mt-4 font-display text-5xl md:text-7xl tracking-tight">
             {title}
           </h1>
-          <p className="mt-6 text-xl font-serif-body italic text-muted-foreground max-w-xl text-balance">
+          <p className="mt-6 text-xl text-muted-foreground max-w-xl text-balance">
             {description}
           </p>
           <div className="mt-8 text-xs font-mono-jb tracking-wider text-muted-foreground">
@@ -79,7 +79,7 @@ const Category = () => {
         </div>
 
         {sorted.length === 0 ? (
-          <p className="text-muted-foreground italic py-20 text-center">
+          <p className="text-muted-foreground py-20 text-center">
             Bu kategoride henüz yazı yok.
           </p>
         ) : (
