@@ -68,10 +68,7 @@ export const authors: Author[] = [
 ];
 
 export const categories = [
-  { slug: "dusunce", name: "Düşünce", description: "Felsefe, eleştiri, fikir denemeleri." },
-  { slug: "edebiyat", name: "Edebiyat", description: "Kurmaca, şiir ve eleştiri üzerine yazılar." },
-  { slug: "sehir", name: "Şehir", description: "Mekan, hafıza, mimari ve yaşanan yerler." },
-  { slug: "teknoloji", name: "Teknoloji", description: "Dijital kültür, dikkat ve teknolojinin felsefesi." },
+  { slug: "arastirmalar", name: "Araştırmalar", description: "Kaynaklara dayalı, derinlemesine incelemeler." },
   { slug: "kolektif", name: "Kolektif", description: "Kişisel deneyim ve gözlem üzerine yazılar." },
 ];
 
