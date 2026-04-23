@@ -1,5 +1,5 @@
 import { Link, NavLink, useLocation } from "react-router-dom";
-import { Search, User as UserIcon } from "lucide-react";
+import { Search, User as UserIcon, PenLine } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 
@@ -73,13 +73,22 @@ export const SiteHeader = () => {
             <Search className="h-4 w-4" strokeWidth={1.5} />
           </Link>
           {loading ? null : session ? (
-            <Link
-              to="/profil"
-              className="inline-flex items-center gap-2 text-sm border border-foreground/80 px-4 py-2 hover:bg-foreground hover:text-background transition-colors"
-            >
-              <UserIcon className="h-3.5 w-3.5" strokeWidth={1.5} />
-              Profil
-            </Link>
+            <>
+              <Link
+                to="/profil/yaz/yeni"
+                className="hidden sm:inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <PenLine className="h-3.5 w-3.5" strokeWidth={1.5} />
+                Yaz
+              </Link>
+              <Link
+                to="/profil"
+                className="inline-flex items-center gap-2 text-sm border border-foreground/80 px-4 py-2 hover:bg-foreground hover:text-background transition-colors"
+              >
+                <UserIcon className="h-3.5 w-3.5" strokeWidth={1.5} />
+                Profil
+              </Link>
+            </>
           ) : (
             <>
               <Link

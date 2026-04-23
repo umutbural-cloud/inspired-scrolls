@@ -10,12 +10,23 @@ import {
   Settings,
   Bell,
   Tags,
+  PenLine,
+  FileText,
+  FileCheck2,
 } from "lucide-react";
 
 const sections = [
   {
     label: "Genel",
     items: [{ to: "/profil", label: "Genel Bakış", icon: LayoutDashboard, end: true }],
+  },
+  {
+    label: "Yazma",
+    items: [
+      { to: "/profil/yaz/yeni", label: "Yeni Yazı", icon: PenLine },
+      { to: "/profil/taslaklar", label: "Taslaklarım", icon: FileText },
+      { to: "/profil/yazilar", label: "Yazılarım", icon: FileCheck2 },
+    ],
   },
   {
     label: "Okuma Odası",
