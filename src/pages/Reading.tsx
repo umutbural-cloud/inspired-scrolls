@@ -261,7 +261,7 @@ const Reading = () => {
       {/* İçerik */}
       <article className="reading-column px-6 mt-14 prose-reading">
         {article.body.map((p, i) => (
-          <p key={i} className={i === 0 ? "drop-cap" : ""}>
+          <p key={i} className={i === 0 ? "first-letter:font-display first-letter:text-foreground text-lg" : ""}>
             {p}
           </p>
         ))}
