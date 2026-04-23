@@ -1,9 +1,52 @@
-import { Link } from "react-router-dom";
-import { ArrowRight } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { ArrowRight, Loader2 } from "lucide-react";
 import { AuthShell } from "@/components/site/AuthShell";
-import { SocialAuth } from "@/components/site/SocialAuth";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/context/AuthContext";
+import { toast } from "sonner";
 
 const SignUp = () => {
+  const navigate = useNavigate();
+  const { session } = useAuth();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (session) navigate("/profil", { replace: true });
+  }, [session, navigate]);
+
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (submitting) return;
+    if (password.length < 8) {
+      toast.error("Şifre en az 8 karakter olmalı.");
+      return;
+    }
+    setSubmitting(true);
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: `${window.location.origin}/profil`,
+        data: { display_name: name.trim() || null },
+      },
+    });
+    setSubmitting(false);
+    if (error) {
+      toast.error(
+        error.message === "User already registered"
+          ? "Bu e-posta zaten kayıtlı. Giriş yapmayı dene."
+          : error.message
+      );
+      return;
+    }
+    toast.success("Hoş geldin. Hesabın oluşturuldu.");
+    navigate("/profil", { replace: true });
+  };
+
   return (
     <AuthShell
       eyebrow="Kayıt"
@@ -18,25 +61,14 @@ const SignUp = () => {
         </>
       }
     >
-      <SocialAuth mode="signup" />
-
-      <div className="my-7 flex items-center gap-4">
-        <span className="h-px flex-1 bg-hairline" />
-        <span className="eyebrow text-muted-foreground">veya e-posta ile</span>
-        <span className="h-px flex-1 bg-hairline" />
-      </div>
-
-      <form
-        className="space-y-5"
-        onSubmit={(e) => {
-          e.preventDefault();
-        }}
-      >
+      <form className="space-y-5" onSubmit={onSubmit}>
         <div className="space-y-1.5">
           <label htmlFor="name" className="eyebrow">Ad ve soyad</label>
           <input
             id="name"
             type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
             autoComplete="name"
             placeholder="Elif Yıldırım"
             className="w-full h-11 px-3 bg-transparent border border-hairline focus:border-foreground outline-none transition-colors text-base font-serif-body"
@@ -47,6 +79,9 @@ const SignUp = () => {
           <input
             id="email"
             type="email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             autoComplete="email"
             placeholder="elif@ornek.com"
             className="w-full h-11 px-3 bg-transparent border border-hairline focus:border-foreground outline-none transition-colors text-base font-serif-body"
@@ -57,6 +92,10 @@ const SignUp = () => {
           <input
             id="password"
             type="password"
+            required
+            minLength={8}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             autoComplete="new-password"
             placeholder="En az 8 karakter"
             className="w-full h-11 px-3 bg-transparent border border-hairline focus:border-foreground outline-none transition-colors text-base font-serif-body"
@@ -66,23 +105,21 @@ const SignUp = () => {
           </p>
         </div>
 
-        <label className="flex gap-3 items-start text-sm text-muted-foreground cursor-pointer">
-          <input
-            type="checkbox"
-            className="mt-1 accent-foreground"
-            defaultChecked
-          />
-          <span>
-            Yeni yazılar ve aylık manifestoyu e-posta ile almak istiyorum.
-          </span>
-        </label>
-
         <button
           type="submit"
-          className="w-full h-11 bg-foreground text-background hover:bg-foreground/90 transition-colors text-sm inline-flex items-center justify-center gap-2 group"
+          disabled={submitting}
+          className="w-full h-11 bg-foreground text-background hover:bg-foreground/90 transition-colors text-sm inline-flex items-center justify-center gap-2 group disabled:opacity-60 disabled:cursor-not-allowed"
         >
-          Hesabımı oluştur
-          <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform" strokeWidth={1.5} />
+          {submitting ? (
+            <>
+              <Loader2 className="h-3.5 w-3.5 animate-spin" /> Oluşturuluyor…
+            </>
+          ) : (
+            <>
+              Hesabımı oluştur
+              <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform" strokeWidth={1.5} />
+            </>
+          )}
         </button>
 
         <p className="text-xs text-muted-foreground leading-relaxed">
