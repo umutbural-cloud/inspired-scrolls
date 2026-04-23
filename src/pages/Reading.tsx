@@ -255,6 +255,27 @@ const Reading = () => {
     .filter((a) => a.slug !== article.slug)
     .slice(0, 3);
 
+  // Bir paragraf içindeki tüm highlight metinlerini <mark> ile sarmala
+  const renderWithHighlights = (text: string, key: string) => {
+    if (highlights.length === 0) return text;
+    // Uzun olanı önce işaretle (overlap'i azaltmak için)
+    const sorted = [...highlights].sort((a, b) => b.text.length - a.text.length);
+    const escaped = sorted.map((h) => h.text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
+    const re = new RegExp(`(${escaped.join("|")})`, "g");
+    const parts = text.split(re);
+    return parts.map((p, i) => {
+      const match = sorted.find((h) => h.text === p);
+      if (match) {
+        return (
+          <mark key={`${key}-${i}`} className="user-highlight" data-hl-id={match.id}>
+            {p}
+          </mark>
+        );
+      }
+      return <span key={`${key}-${i}`}>{p}</span>;
+    });
+  };
+
   return (
     <SiteLayout>
       {/* İlerleme çubuğu */}
