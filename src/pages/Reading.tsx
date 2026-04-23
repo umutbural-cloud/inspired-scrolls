@@ -33,8 +33,6 @@ const Reading = () => {
     return () => window.removeEventListener("scroll", onScroll);
   }, [slug]);
 
-  if (!article) return <Navigate to="/" replace />;
-
   // İlk yüklemede tamamlandı + kaydedildi durumunu çek
   useEffect(() => {
     if (!user || !article) return;
@@ -45,7 +43,7 @@ const Reading = () => {
           .from("completed_articles")
           .select("article_slug")
           .eq("user_id", user.id)
-          .eq("article_slug", article.slug)
+          .eq("article_slug", article!.slug)
           .maybeSingle(),
         supabase
           .from("reading_lists")
@@ -64,7 +62,7 @@ const Reading = () => {
           .from("reading_list_items")
           .select("article_slug")
           .eq("list_id", defList.id)
-          .eq("article_slug", article.slug)
+          .eq("article_slug", article!.slug)
           .maybeSingle();
         if (!cancelled && it) setSaved(true);
       }
@@ -72,6 +70,8 @@ const Reading = () => {
     return () => { cancelled = true; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, article?.slug]);
+
+  if (!article) return <Navigate to="/" replace />;
 
   const persistComplete = async () => {
     if (!user || !article) {
