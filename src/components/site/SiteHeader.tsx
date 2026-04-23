@@ -61,12 +61,17 @@ export const SiteHeader = () => {
         </nav>
 
         <div className="flex items-center gap-3">
-          <button
+          <Link
+            to="/ara"
             aria-label="Ara"
-            className="p-2 text-muted-foreground hover:text-foreground transition-colors"
+            className={`p-2 transition-colors ${
+              location.pathname === "/ara"
+                ? "text-foreground"
+                : "text-muted-foreground hover:text-foreground"
+            }`}
           >
             <Search className="h-4 w-4" strokeWidth={1.5} />
-          </button>
+          </Link>
           {loading ? null : session ? (
             <Link
               to="/profil"

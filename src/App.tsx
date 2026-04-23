@@ -11,6 +11,7 @@ import AuthorProfile from "./pages/AuthorProfile.tsx";
 import Category from "./pages/Category.tsx";
 import Research from "./pages/Research.tsx";
 import Collective from "./pages/Collective.tsx";
+import Search from "./pages/Search.tsx";
 import SignIn from "./pages/SignIn.tsx";
 import SignUp from "./pages/SignUp.tsx";
 import Overview from "./pages/profile/Overview.tsx";
@@ -39,6 +40,7 @@ const App = () => (
             <Route path="/etiket/:slug" element={<Category />} />
             <Route path="/arastirmalar" element={<Research />} />
             <Route path="/kolektif" element={<Collective />} />
+            <Route path="/ara" element={<Search />} />
             <Route path="/giris" element={<SignIn />} />
             <Route path="/kayit" element={<SignUp />} />
             <Route path="/profil" element={<Overview />} />

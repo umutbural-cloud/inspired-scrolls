@@ -1,8 +1,13 @@
 import { useState } from "react";
-import { useParams, Navigate } from "react-router-dom";
+import { useLocation, useParams, Navigate } from "react-router-dom";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { ArticleCard } from "@/components/site/ArticleCard";
-import { findCategory, articlesByCategory } from "@/data/mock";
+import {
+  findCategory,
+  articlesByCategory,
+  findTag,
+  articlesByTag,
+} from "@/data/mock";
 
 const sortOptions = [
   { id: "new", label: "En Yeni" },
@@ -14,28 +19,38 @@ type SortId = (typeof sortOptions)[number]["id"];
 
 const Category = () => {
   const { slug } = useParams();
-  const category = slug ? findCategory(slug) : undefined;
+  const location = useLocation();
+  const isTag = location.pathname.startsWith("/etiket/");
+  const tag = slug && isTag ? findTag(slug) : undefined;
+  const category = slug && !isTag ? findCategory(slug) : undefined;
   const [sort, setSort] = useState<SortId>("new");
 
-  if (!category) return <Navigate to="/" replace />;
+  if (isTag && !tag) return <Navigate to="/" replace />;
+  if (!isTag && !category) return <Navigate to="/" replace />;
 
-  const list = articlesByCategory(category.slug);
+  const list = isTag ? articlesByTag(tag!.slug) : articlesByCategory(category!.slug);
   const sorted = [...list].sort((a, b) => {
     if (sort === "popular") return b.reads - a.reads;
     if (sort === "recommended") return b.readMinutes - a.readMinutes;
     return 0;
   });
 
+  const eyebrow = isTag ? "Etiket" : "Kategori";
+  const title = isTag ? `#${tag!.name}` : category!.name;
+  const description = isTag
+    ? `"${tag!.name}" etiketiyle yayımlanan tüm yazılar.`
+    : category!.description;
+
   return (
     <SiteLayout>
       <section className="border-b border-hairline">
         <div className="content-column px-6 pt-20 pb-16 md:pt-28">
-          <span className="eyebrow text-accent">Kategori</span>
+          <span className="eyebrow text-accent">{eyebrow}</span>
           <h1 className="mt-4 font-display text-5xl md:text-7xl tracking-tight">
-            {category.name}
+            {title}
           </h1>
           <p className="mt-6 text-xl font-serif-body italic text-muted-foreground max-w-xl text-balance">
-            {category.description}
+            {description}
           </p>
           <div className="mt-8 text-xs font-mono-jb tracking-wider text-muted-foreground">
             {list.length} YAZI
