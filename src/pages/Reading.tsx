@@ -3,7 +3,7 @@ import { Link, useParams, Navigate } from "react-router-dom";
 import { Bookmark, Heart, Share2, ArrowRight, ArrowLeft, Check } from "lucide-react";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { ArticleCard } from "@/components/site/ArticleCard";
-import { findArticle, articles } from "@/data/mock";
+import { findArticle, articles, tags as allTags } from "@/data/mock";
 import { useAuth } from "@/context/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -279,15 +279,18 @@ const Reading = () => {
       {/* Etiketler */}
       <div className="reading-column px-6 mt-16">
         <div className="flex flex-wrap gap-2">
-          {article.tags.map((t) => (
-            <Link
-              key={t}
-              to={`/etiket/${t}`}
-              className="text-xs px-3 py-1.5 border border-hairline hover:border-accent hover:text-accent transition-colors"
-            >
-              #{t}
-            </Link>
-          ))}
+          {article.tags.map((t) => {
+            const slug = allTags.find((x) => x.name === t)?.slug ?? t;
+            return (
+              <Link
+                key={t}
+                to={`/etiket/${slug}`}
+                className="text-xs px-3 py-1.5 border border-hairline hover:border-accent hover:text-accent transition-colors"
+              >
+                #{t}
+              </Link>
+            );
+          })}
         </div>
       </div>
 
