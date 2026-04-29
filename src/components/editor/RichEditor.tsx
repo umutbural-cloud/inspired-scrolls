@@ -8,7 +8,6 @@ import {
   Bold, Italic, Heading2, Heading3, Quote, List, ListOrdered,
   Image as ImageIcon, Link2, Undo2, Redo2,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { uploadPostImage } from "@/lib/posts";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "sonner";
@@ -26,16 +25,16 @@ export const RichEditor = ({ initialContent, onChange, editable = true }: Props)
   const editor = useEditor({
     extensions: [
       StarterKit.configure({ heading: { levels: [2, 3] } }),
-      Image.configure({ HTMLAttributes: { class: "rounded-md my-4" } }),
+      Image.configure({ HTMLAttributes: { class: "rounded-xl my-6 w-full" } }),
       Link.configure({ openOnClick: false, HTMLAttributes: { class: "underline text-accent" } }),
-      Placeholder.configure({ placeholder: "Yazınıza buradan başlayın…" }),
+      Placeholder.configure({ placeholder: "Yazmaya başla…" }),
     ],
     content: initialContent || "",
     editable,
     editorProps: {
       attributes: {
         class:
-          "prose prose-neutral dark:prose-invert max-w-none focus:outline-none min-h-[400px] py-4",
+          "prose prose-neutral dark:prose-invert max-w-none focus:outline-none min-h-[60vh] text-lg leading-relaxed",
       },
     },
     onUpdate: ({ editor }) => {
@@ -75,9 +74,10 @@ export const RichEditor = ({ initialContent, onChange, editable = true }: Props)
   };
 
   return (
-    <div className="border border-hairline">
+    <div className="relative">
+      {/* Sade floating toolbar — sayfa altında ortalanmış pill */}
       {editable && (
-        <div className="flex flex-wrap items-center gap-1 border-b border-hairline px-2 py-1.5 bg-surface-sunken/30">
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-0.5 bg-foreground/95 backdrop-blur text-background rounded-full px-2 py-1.5 shadow-xl">
           <ToolBtn onClick={() => editor.chain().focus().toggleBold().run()} active={editor.isActive("bold")} aria="Kalın"><Bold className="h-3.5 w-3.5" /></ToolBtn>
           <ToolBtn onClick={() => editor.chain().focus().toggleItalic().run()} active={editor.isActive("italic")} aria="İtalik"><Italic className="h-3.5 w-3.5" /></ToolBtn>
           <Sep />
@@ -90,6 +90,9 @@ export const RichEditor = ({ initialContent, onChange, editable = true }: Props)
           <Sep />
           <ToolBtn onClick={setLink} active={editor.isActive("link")} aria="Bağlantı"><Link2 className="h-3.5 w-3.5" /></ToolBtn>
           <ToolBtn onClick={() => fileRef.current?.click()} active={false} aria="Görsel"><ImageIcon className="h-3.5 w-3.5" /></ToolBtn>
+          <Sep />
+          <ToolBtn onClick={() => editor.chain().focus().undo().run()} active={false} aria="Geri al"><Undo2 className="h-3.5 w-3.5" /></ToolBtn>
+          <ToolBtn onClick={() => editor.chain().focus().redo().run()} active={false} aria="Yinele"><Redo2 className="h-3.5 w-3.5" /></ToolBtn>
           <input
             ref={fileRef}
             type="file"
@@ -101,15 +104,10 @@ export const RichEditor = ({ initialContent, onChange, editable = true }: Props)
               e.target.value = "";
             }}
           />
-          <div className="ml-auto flex items-center gap-1">
-            <ToolBtn onClick={() => editor.chain().focus().undo().run()} active={false} aria="Geri al"><Undo2 className="h-3.5 w-3.5" /></ToolBtn>
-            <ToolBtn onClick={() => editor.chain().focus().redo().run()} active={false} aria="Yinele"><Redo2 className="h-3.5 w-3.5" /></ToolBtn>
-          </div>
         </div>
       )}
-      <div className="px-4">
-        <EditorContent editor={editor} />
-      </div>
+
+      <EditorContent editor={editor} />
     </div>
   );
 };
@@ -122,12 +120,12 @@ const ToolBtn = ({
     onClick={onClick}
     aria-label={aria}
     title={aria}
-    className={`p-1.5 rounded transition-colors ${active ? "bg-foreground text-background" : "text-muted-foreground hover:text-foreground hover:bg-surface-sunken"}`}
+    className={`p-2 rounded-full transition-colors ${active ? "bg-accent text-accent-foreground" : "text-background/80 hover:text-background hover:bg-background/10"}`}
   >
     {children}
   </button>
 );
 
-const Sep = () => <span className="w-px h-4 bg-hairline mx-1" />;
+const Sep = () => <span className="w-px h-4 bg-background/20 mx-0.5" />;
 
 export type { Editor };

@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { AccountLayout } from "@/components/site/AccountLayout";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { AccountGuard } from "@/components/site/AccountGuard";
 import { RichEditor } from "@/components/editor/RichEditor";
 import { Input } from "@/components/ui/input";
@@ -8,6 +7,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
+import {
+  Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger,
+} from "@/components/ui/sheet";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/context/AuthContext";
 import {
@@ -15,7 +17,7 @@ import {
   STATUS_LABELS, STATUS_TONES, type Post,
 } from "@/lib/posts";
 import { toast } from "sonner";
-import { ImagePlus, Loader2, Send, Save, X } from "lucide-react";
+import { ImagePlus, Loader2, Send, Save, X, ArrowLeft, Settings2 } from "lucide-react";
 
 const CATEGORIES = [
   { slug: "kisisel-gelisim", label: "Kişisel Gelişim" },
@@ -171,57 +173,213 @@ function EditorPageInner() {
 
   if (loading) {
     return (
-      <AccountLayout title="Yükleniyor…">
-        <div className="flex justify-center py-20 text-muted-foreground">
-          <Loader2 className="h-5 w-5 animate-spin" />
-        </div>
-      </AccountLayout>
+      <div className="min-h-screen flex items-center justify-center text-muted-foreground">
+        <Loader2 className="h-5 w-5 animate-spin" />
+      </div>
     );
   }
 
+  const wordCount = contentText.trim().split(/\s+/).filter(Boolean).length;
+
   return (
-    <AccountLayout
-      eyebrow="Yazı yazma"
-      title={isNew ? "Yeni yazı" : title || "Başlıksız"}
-      description="Yazınızı oluşturun, düzenleyin ve editör onayına gönderin."
-      actions={
-        <div className="flex items-center gap-2">
-          {post && (
-            <Badge variant="outline" className={STATUS_TONES[post.status]}>
-              {STATUS_LABELS[post.status]}
-            </Badge>
-          )}
-          <Button variant="outline" size="sm" onClick={onSaveDraft} disabled={saving}>
-            <Save className="h-3.5 w-3.5 mr-1.5" /> Taslak
-          </Button>
-          <Button size="sm" onClick={onSubmit} disabled={saving}>
-            <Send className="h-3.5 w-3.5 mr-1.5" /> Gönder
-          </Button>
+    <div className="min-h-screen flex flex-col bg-background">
+      {/* Üst toolbar — minimal */}
+      <header className="sticky top-0 z-30 bg-background/90 backdrop-blur-xl border-b border-hairline">
+        <div className="px-4 md:px-6 py-3 flex items-center gap-3">
+          <Link
+            to="/profil/taslaklar"
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors px-2 py-1.5 rounded-lg hover:bg-secondary"
+          >
+            <ArrowLeft className="h-4 w-4" strokeWidth={2} />
+            <span className="hidden sm:inline">Geri</span>
+          </Link>
+
+          <div className="flex items-center gap-2 ml-1">
+            {post && (
+              <Badge variant="outline" className={STATUS_TONES[post.status]}>
+                {STATUS_LABELS[post.status]}
+              </Badge>
+            )}
+            <span className="hidden md:inline text-xs text-muted-foreground tabular-nums">
+              {wordCount} kelime · ~{calcReadMinutes(contentText)} dk
+            </span>
+          </div>
+
+          <div className="ml-auto flex items-center gap-2">
+            <Button variant="ghost" size="sm" onClick={onSaveDraft} disabled={saving} className="rounded-full">
+              {saving ? <Loader2 className="h-3.5 w-3.5 mr-1.5 animate-spin" /> : <Save className="h-3.5 w-3.5 mr-1.5" />}
+              Taslak
+            </Button>
+
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="sm" className="rounded-full" aria-label="Yazı ayarları">
+                  <Settings2 className="h-4 w-4" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-full sm:max-w-md overflow-y-auto">
+                <SheetHeader className="mb-6">
+                  <SheetTitle className="font-display text-xl">Yazı ayarları</SheetTitle>
+                </SheetHeader>
+                <div className="space-y-7">
+                  {/* Özet */}
+                  <section>
+                    <Label className="eyebrow mb-2 block">Özet</Label>
+                    <Textarea
+                      value={excerpt}
+                      onChange={(e) => setExcerpt(e.target.value)}
+                      placeholder="Kart önizlemesinde görünür"
+                      className="min-h-[70px]"
+                    />
+                  </section>
+
+                  {/* Kapak */}
+                  <section>
+                    <Label className="eyebrow mb-2 block">Kapak görseli</Label>
+                    {coverUrl ? (
+                      <div className="relative group">
+                        <img src={coverUrl} alt="" className="w-full aspect-[16/10] object-cover rounded-xl" />
+                        <button
+                          onClick={() => setCoverUrl(null)}
+                          className="absolute top-2 right-2 p-1.5 rounded-full bg-background/95 border border-hairline opacity-0 group-hover:opacity-100 transition"
+                          aria-label="Kaldır"
+                        >
+                          <X className="h-3.5 w-3.5" />
+                        </button>
+                      </div>
+                    ) : (
+                      <button
+                        onClick={() => coverInputRef.current?.click()}
+                        className="w-full aspect-[16/10] border-2 border-dashed border-hairline rounded-xl flex flex-col items-center justify-center gap-2 text-muted-foreground hover:text-accent hover:border-accent transition-colors"
+                      >
+                        <ImagePlus className="h-5 w-5" strokeWidth={2} />
+                        <span className="text-xs font-medium">Kapak yükle</span>
+                      </button>
+                    )}
+                    <input
+                      ref={coverInputRef}
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={(e) => {
+                        const f = e.target.files?.[0];
+                        if (f) handleUpload(f, "cover");
+                        e.target.value = "";
+                      }}
+                    />
+                  </section>
+
+                  {/* Kategori */}
+                  <section>
+                    <Label className="eyebrow mb-2 block">Kategori</Label>
+                    <select
+                      value={categorySlug}
+                      onChange={(e) => setCategorySlug(e.target.value)}
+                      className="w-full border border-hairline bg-background rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent"
+                    >
+                      <option value="">Seçiniz…</option>
+                      {CATEGORIES.map((c) => (
+                        <option key={c.slug} value={c.slug}>{c.label}</option>
+                      ))}
+                    </select>
+                  </section>
+
+                  {/* Etiketler */}
+                  <section>
+                    <Label className="eyebrow mb-2 block">Etiketler</Label>
+                    <Input
+                      value={tagsInput}
+                      onChange={(e) => setTagsInput(e.target.value)}
+                      placeholder="virgülle ayır"
+                    />
+                    {tags.length > 0 && (
+                      <div className="flex flex-wrap gap-1.5 mt-2">
+                        {tags.map((t) => (
+                          <Badge key={t} variant="secondary" className="font-normal rounded-full">{t}</Badge>
+                        ))}
+                      </div>
+                    )}
+                  </section>
+
+                  {/* SEO */}
+                  <section className="space-y-3 pt-2 border-t border-hairline">
+                    <Label className="eyebrow block pt-3">SEO</Label>
+                    <div>
+                      <Label className="text-xs text-muted-foreground">Meta başlık</Label>
+                      <Input value={metaTitle} onChange={(e) => setMetaTitle(e.target.value)} placeholder={title} className="mt-1" />
+                    </div>
+                    <div>
+                      <Label className="text-xs text-muted-foreground">Meta açıklama</Label>
+                      <Textarea
+                        value={metaDescription}
+                        onChange={(e) => setMetaDescription(e.target.value)}
+                        placeholder="Arama motorlarında görünecek açıklama"
+                        className="mt-1 min-h-[60px]"
+                        maxLength={160}
+                      />
+                      <div className="text-[10px] text-muted-foreground mt-1 text-right">{metaDescription.length}/160</div>
+                    </div>
+                    <div>
+                      <Label className="text-xs text-muted-foreground">Open Graph görseli</Label>
+                      {ogImage ? (
+                        <div className="relative group mt-1">
+                          <img src={ogImage} alt="" className="w-full aspect-[16/10] object-cover rounded-xl" />
+                          <button
+                            onClick={() => setOgImage(null)}
+                            className="absolute top-2 right-2 p-1.5 rounded-full bg-background/95 border border-hairline opacity-0 group-hover:opacity-100 transition"
+                            aria-label="Kaldır"
+                          >
+                            <X className="h-3.5 w-3.5" />
+                          </button>
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => ogInputRef.current?.click()}
+                          className="mt-1 w-full aspect-[16/10] border-2 border-dashed border-hairline rounded-xl flex flex-col items-center justify-center gap-2 text-muted-foreground hover:text-accent hover:border-accent transition-colors"
+                        >
+                          <ImagePlus className="h-5 w-5" strokeWidth={2} />
+                          <span className="text-xs font-medium">OG görseli yükle</span>
+                        </button>
+                      )}
+                      <input
+                        ref={ogInputRef}
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={(e) => {
+                          const f = e.target.files?.[0];
+                          if (f) handleUpload(f, "og");
+                          e.target.value = "";
+                        }}
+                      />
+                    </div>
+                  </section>
+                </div>
+              </SheetContent>
+            </Sheet>
+
+            <Button
+              size="sm"
+              onClick={onSubmit}
+              disabled={saving}
+              className="rounded-full bg-accent text-accent-foreground hover:bg-accent-glow"
+            >
+              <Send className="h-3.5 w-3.5 mr-1.5" /> Gönder
+            </Button>
+          </div>
         </div>
-      }
-    >
-      <div className="grid lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2 space-y-6">
-          <div>
-            <Label className="eyebrow text-muted-foreground">Başlık</Label>
-            <Input
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="Yazınızın başlığı…"
-              className="mt-2 text-2xl md:text-3xl font-display border-0 border-b border-hairline rounded-none px-0 focus-visible:ring-0 focus-visible:border-foreground h-auto py-3"
-            />
-          </div>
-          <div>
-            <Label className="eyebrow text-muted-foreground">Özet</Label>
-            <Textarea
-              value={excerpt}
-              onChange={(e) => setExcerpt(e.target.value)}
-              placeholder="Kısa özet (yazı kartlarında görünür)"
-              className="mt-2 min-h-[60px]"
-            />
-          </div>
-          <div>
-            <Label className="eyebrow text-muted-foreground mb-2 block">İçerik</Label>
+      </header>
+
+      {/* Yazma alanı — geniş, ortalanmış, sade */}
+      <main className="flex-1 px-4 md:px-6 py-10 md:py-16">
+        <div className="max-w-3xl mx-auto">
+          <Input
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Başlık"
+            className="text-3xl md:text-5xl font-display font-extrabold tracking-[-0.03em] border-0 rounded-none px-0 focus-visible:ring-0 focus-visible:ring-offset-0 h-auto py-2 placeholder:text-muted-foreground/40 leading-tight bg-transparent shadow-none"
+          />
+          <div className="mt-6">
             <RichEditor
               initialContent={content}
               onChange={(json, text) => {
@@ -229,133 +387,10 @@ function EditorPageInner() {
                 setContentText(text);
               }}
             />
-            <div className="mt-2 text-xs text-muted-foreground">
-              ~{calcReadMinutes(contentText)} dk okuma · {contentText.trim().split(/\s+/).filter(Boolean).length} kelime
-            </div>
           </div>
         </div>
-
-        <aside className="space-y-8">
-          <section>
-            <div className="eyebrow text-muted-foreground mb-3">Kapak görseli</div>
-            {coverUrl ? (
-              <div className="relative group">
-                <img src={coverUrl} alt="" className="w-full aspect-[16/10] object-cover" />
-                <button
-                  onClick={() => setCoverUrl(null)}
-                  className="absolute top-2 right-2 p-1 bg-background/90 border border-hairline opacity-0 group-hover:opacity-100 transition"
-                  aria-label="Kaldır"
-                >
-                  <X className="h-3.5 w-3.5" />
-                </button>
-              </div>
-            ) : (
-              <button
-                onClick={() => coverInputRef.current?.click()}
-                className="w-full aspect-[16/10] border border-dashed border-hairline flex flex-col items-center justify-center gap-2 text-muted-foreground hover:text-foreground hover:border-foreground transition-colors"
-              >
-                <ImagePlus className="h-5 w-5" strokeWidth={1.5} />
-                <span className="text-xs">Kapak yükle</span>
-              </button>
-            )}
-            <input
-              ref={coverInputRef}
-              type="file"
-              accept="image/*"
-              className="hidden"
-              onChange={(e) => {
-                const f = e.target.files?.[0];
-                if (f) handleUpload(f, "cover");
-                e.target.value = "";
-              }}
-            />
-          </section>
-
-          <section>
-            <div className="eyebrow text-muted-foreground mb-3">Kategori</div>
-            <select
-              value={categorySlug}
-              onChange={(e) => setCategorySlug(e.target.value)}
-              className="w-full border border-hairline bg-background px-3 py-2 text-sm"
-            >
-              <option value="">Seçiniz…</option>
-              {CATEGORIES.map((c) => (
-                <option key={c.slug} value={c.slug}>{c.label}</option>
-              ))}
-            </select>
-          </section>
-
-          <section>
-            <div className="eyebrow text-muted-foreground mb-3">Etiketler</div>
-            <Input
-              value={tagsInput}
-              onChange={(e) => setTagsInput(e.target.value)}
-              placeholder="virgülle ayır"
-            />
-            {tags.length > 0 && (
-              <div className="flex flex-wrap gap-1.5 mt-2">
-                {tags.map((t) => (
-                  <Badge key={t} variant="secondary" className="font-normal">{t}</Badge>
-                ))}
-              </div>
-            )}
-          </section>
-
-          <section className="space-y-3">
-            <div className="eyebrow text-muted-foreground">SEO</div>
-            <div>
-              <Label className="text-xs text-muted-foreground">Meta başlık</Label>
-              <Input value={metaTitle} onChange={(e) => setMetaTitle(e.target.value)} placeholder={title} className="mt-1" />
-            </div>
-            <div>
-              <Label className="text-xs text-muted-foreground">Meta açıklama</Label>
-              <Textarea
-                value={metaDescription}
-                onChange={(e) => setMetaDescription(e.target.value)}
-                placeholder="Arama motorlarında görünecek açıklama"
-                className="mt-1 min-h-[60px]"
-                maxLength={160}
-              />
-              <div className="text-[10px] text-muted-foreground mt-1">{metaDescription.length}/160</div>
-            </div>
-            <div>
-              <Label className="text-xs text-muted-foreground">Open Graph görseli</Label>
-              {ogImage ? (
-                <div className="relative group mt-1">
-                  <img src={ogImage} alt="" className="w-full aspect-[16/10] object-cover" />
-                  <button
-                    onClick={() => setOgImage(null)}
-                    className="absolute top-2 right-2 p-1 bg-background/90 border border-hairline opacity-0 group-hover:opacity-100 transition"
-                    aria-label="Kaldır"
-                  >
-                    <X className="h-3.5 w-3.5" />
-                  </button>
-                </div>
-              ) : (
-                <button
-                  onClick={() => ogInputRef.current?.click()}
-                  className="mt-1 w-full aspect-[16/10] border border-dashed border-hairline flex flex-col items-center justify-center gap-2 text-muted-foreground hover:text-foreground hover:border-foreground transition-colors"
-                >
-                  <ImagePlus className="h-5 w-5" strokeWidth={1.5} />
-                  <span className="text-xs">OG görseli yükle</span>
-                </button>
-              )}
-              <input
-                ref={ogInputRef}
-                type="file"
-                accept="image/*"
-                className="hidden"
-                onChange={(e) => {
-                  const f = e.target.files?.[0];
-                  if (f) handleUpload(f, "og");
-                  e.target.value = "";
-                }}
-              />
-            </div>
-          </section>
-        </aside>
-      </div>
-    </AccountLayout>
+      </main>
+    </div>
   );
 }
 

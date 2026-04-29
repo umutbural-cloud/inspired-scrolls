@@ -1,9 +1,8 @@
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { SiteLayout } from "./SiteLayout";
 import {
   LayoutDashboard,
-  BookOpen,
   Bookmark,
   CheckCircle2,
   Users,
@@ -13,6 +12,8 @@ import {
   PenLine,
   FileText,
   FileCheck2,
+  PanelLeftClose,
+  PanelLeftOpen,
 } from "lucide-react";
 
 const sections = [
@@ -59,38 +60,49 @@ export const AccountLayout = ({
   actions?: ReactNode;
   children: ReactNode;
 }) => {
+  const [open, setOpen] = useState(true);
   return (
     <SiteLayout>
-      <div className="wide-column px-6 pt-12 md:pt-16 pb-24">
-        <div className="grid lg:grid-cols-12 gap-10 lg:gap-14">
+      <div className="wide-column px-4 md:px-6 pt-8 md:pt-10 pb-24">
+        <div className={`grid gap-8 lg:gap-12 transition-all duration-300 ${open ? "lg:grid-cols-[260px_minmax(0,1fr)]" : "lg:grid-cols-[64px_minmax(0,1fr)]"}`}>
           {/* Sidebar */}
-          <aside className="lg:col-span-3">
-            <div className="lg:sticky lg:top-24 space-y-8">
-              <div>
-                <span className="eyebrow text-accent flex items-center gap-2">
-                  <BookOpen className="h-3 w-3" strokeWidth={1.5} /> Hesabım
-                </span>
+          <aside className="hidden lg:block">
+            <div className="sticky top-24 surface-card p-3">
+              <div className="flex items-center justify-between px-2 pb-3 mb-2 border-b border-hairline">
+                {open && <span className="eyebrow">Hesabım</span>}
+                <button
+                  onClick={() => setOpen((v) => !v)}
+                  aria-label={open ? "Sidebar'ı kapat" : "Sidebar'ı aç"}
+                  className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors ml-auto"
+                >
+                  {open ? <PanelLeftClose className="h-4 w-4" /> : <PanelLeftOpen className="h-4 w-4" />}
+                </button>
               </div>
-              <nav className="space-y-7">
+              <nav className="space-y-5">
                 {sections.map((sec) => (
                   <div key={sec.label}>
-                    <div className="eyebrow mb-3 text-muted-foreground">{sec.label}</div>
-                    <ul className="space-y-1">
+                    {open && (
+                      <div className="eyebrow mb-2 px-2 text-muted-foreground text-[0.62rem]">
+                        {sec.label}
+                      </div>
+                    )}
+                    <ul className="space-y-0.5">
                       {sec.items.map((it) => (
                         <li key={it.to}>
                           <NavLink
                             to={it.to}
                             end={"end" in it && it.end}
+                            title={it.label}
                             className={({ isActive }) =>
-                              `flex items-center gap-2.5 px-3 py-2 -mx-3 text-sm transition-colors ${
+                              `flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-sm font-medium transition-colors ${
                                 isActive
-                                  ? "text-foreground bg-surface-sunken/60"
-                                  : "text-muted-foreground hover:text-foreground"
-                              }`
+                                  ? "bg-accent/10 text-accent"
+                                  : "text-muted-foreground hover:text-foreground hover:bg-secondary"
+                              } ${open ? "" : "justify-center"}`
                             }
                           >
-                            <it.icon className="h-3.5 w-3.5" strokeWidth={1.5} />
-                            <span>{it.label}</span>
+                            <it.icon className="h-4 w-4 shrink-0" strokeWidth={2} />
+                            {open && <span className="truncate">{it.label}</span>}
                           </NavLink>
                         </li>
                       ))}
@@ -102,11 +114,11 @@ export const AccountLayout = ({
           </aside>
 
           {/* Content */}
-          <section className="lg:col-span-9 min-w-0">
-            <header className="pb-8 border-b border-hairline mb-10 flex items-end justify-between gap-6 flex-wrap">
+          <section className="min-w-0">
+            <header className="pb-6 md:pb-8 border-b border-hairline mb-8 md:mb-10 flex items-end justify-between gap-6 flex-wrap">
               <div>
-                {eyebrow && <span className="eyebrow text-accent">{eyebrow}</span>}
-                <h1 className="mt-2 font-display text-3xl md:text-4xl tracking-tight text-balance">
+                {eyebrow && <span className="eyebrow">{eyebrow}</span>}
+                <h1 className="mt-2 font-display font-extrabold text-3xl md:text-4xl tracking-[-0.03em] text-balance">
                   {title}
                 </h1>
                 {description && (
@@ -115,7 +127,7 @@ export const AccountLayout = ({
                   </p>
                 )}
               </div>
-              {actions && <div className="flex items-center gap-3">{actions}</div>}
+              {actions && <div className="flex items-center gap-2">{actions}</div>}
             </header>
             {children}
           </section>
