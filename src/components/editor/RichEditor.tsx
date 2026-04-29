@@ -1,4 +1,4 @@
-import { useEditor, EditorContent, Editor, BubbleMenu } from "@tiptap/react";
+import { useEditor, EditorContent, Editor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
@@ -75,12 +75,9 @@ export const RichEditor = ({ initialContent, onChange, editable = true }: Props)
 
   return (
     <div className="relative">
+      {/* Sade floating toolbar — sayfa altında ortalanmış pill */}
       {editable && (
-        <BubbleMenu
-          editor={editor}
-          tippyOptions={{ duration: 150, placement: "top" }}
-          className="flex items-center gap-0.5 bg-foreground text-background rounded-full px-2 py-1.5 shadow-lg"
-        >
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-0.5 bg-foreground/95 backdrop-blur text-background rounded-full px-2 py-1.5 shadow-xl">
           <ToolBtn onClick={() => editor.chain().focus().toggleBold().run()} active={editor.isActive("bold")} aria="Kalın"><Bold className="h-3.5 w-3.5" /></ToolBtn>
           <ToolBtn onClick={() => editor.chain().focus().toggleItalic().run()} active={editor.isActive("italic")} aria="İtalik"><Italic className="h-3.5 w-3.5" /></ToolBtn>
           <Sep />
@@ -88,16 +85,10 @@ export const RichEditor = ({ initialContent, onChange, editable = true }: Props)
           <ToolBtn onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()} active={editor.isActive("heading", { level: 3 })} aria="Alt başlık"><Heading3 className="h-3.5 w-3.5" /></ToolBtn>
           <ToolBtn onClick={() => editor.chain().focus().toggleBlockquote().run()} active={editor.isActive("blockquote")} aria="Alıntı"><Quote className="h-3.5 w-3.5" /></ToolBtn>
           <Sep />
-          <ToolBtn onClick={setLink} active={editor.isActive("link")} aria="Bağlantı"><Link2 className="h-3.5 w-3.5" /></ToolBtn>
-        </BubbleMenu>
-      )}
-
-      {/* Sade alt floating toolbar — liste / görsel / undo */}
-      {editable && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-0.5 bg-foreground/95 backdrop-blur text-background rounded-full px-2 py-1.5 shadow-xl">
           <ToolBtn onClick={() => editor.chain().focus().toggleBulletList().run()} active={editor.isActive("bulletList")} aria="Liste"><List className="h-3.5 w-3.5" /></ToolBtn>
           <ToolBtn onClick={() => editor.chain().focus().toggleOrderedList().run()} active={editor.isActive("orderedList")} aria="Sıralı liste"><ListOrdered className="h-3.5 w-3.5" /></ToolBtn>
           <Sep />
+          <ToolBtn onClick={setLink} active={editor.isActive("link")} aria="Bağlantı"><Link2 className="h-3.5 w-3.5" /></ToolBtn>
           <ToolBtn onClick={() => fileRef.current?.click()} active={false} aria="Görsel"><ImageIcon className="h-3.5 w-3.5" /></ToolBtn>
           <Sep />
           <ToolBtn onClick={() => editor.chain().focus().undo().run()} active={false} aria="Geri al"><Undo2 className="h-3.5 w-3.5" /></ToolBtn>
