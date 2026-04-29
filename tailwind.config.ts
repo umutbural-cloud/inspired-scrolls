@@ -12,8 +12,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ["Fraunces", "Iowan Old Style", "Georgia", "serif"],
-        serif: ["Fraunces", "Iowan Old Style", "Georgia", "serif"],
+        display: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
+        serif: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
         sans: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
         mono: ["JetBrains Mono", "ui-monospace", "monospace"],
       },
