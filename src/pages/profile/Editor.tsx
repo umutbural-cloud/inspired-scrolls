@@ -182,9 +182,9 @@ function EditorPageInner() {
   const wordCount = contentText.trim().split(/\s+/).filter(Boolean).length;
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="min-h-screen flex flex-col bg-muted/60">
       {/* Üst toolbar — minimal */}
-      <header className="sticky top-0 z-30 bg-background/90 backdrop-blur-xl border-b border-hairline">
+      <header className="sticky top-0 z-30 bg-background/95 backdrop-blur-xl border-b border-hairline">
         <div className="px-4 md:px-6 py-3 flex items-center gap-3">
           <Link
             to="/profil/taslaklar"
@@ -370,9 +370,9 @@ function EditorPageInner() {
         </div>
       </header>
 
-      {/* Yazma alanı — geniş, ortalanmış, sade */}
-      <main className="flex-1 px-4 md:px-6 py-10 md:py-16">
-        <div className="max-w-3xl mx-auto">
+      {/* Yazma alanı — Google Docs benzeri A4 sayfa */}
+      <main className="flex-1 px-4 md:px-6 py-8 md:py-12 pb-32">
+        <div className="mx-auto bg-background shadow-soft rounded-md border border-hairline w-full max-w-[816px] min-h-[1056px] px-10 md:px-20 py-12 md:py-20">
           <Input
             value={title}
             onChange={(e) => setTitle(e.target.value)}
