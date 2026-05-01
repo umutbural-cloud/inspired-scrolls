@@ -50,14 +50,14 @@ const OverviewInner = () => {
       actions={
         <button
           onClick={signOut}
-          className="text-xs font-mono-jb tracking-wider text-muted-foreground hover:text-foreground border-b border-hairline hover:border-foreground pb-1 transition-colors"
+          className="text-xs font-semibold text-muted-foreground hover:text-foreground px-3 py-1.5 rounded-full hover:bg-secondary transition-colors"
         >
-          ÇIKIŞ YAP
+          Çıkış yap
         </button>
       }
     >
       {/* İstatistikler */}
-      <div className="grid sm:grid-cols-3 gap-px bg-hairline border border-hairline">
+      <div className="grid sm:grid-cols-3 gap-4">
         <StatCell
           icon={Flame}
           value={`${stats?.current_streak ?? 0} gün`}
@@ -79,23 +79,23 @@ const OverviewInner = () => {
       </div>
 
       {/* Son tamamlananlar */}
-      <section className="mt-14">
+      <section className="mt-12">
         <div className="flex items-baseline justify-between mb-6">
-          <h2 className="font-display text-2xl">Son Tamamladıkların</h2>
+          <h2 className="font-display font-bold text-2xl tracking-tight">Son tamamladıkların</h2>
           <Link
             to="/profil/tamamlanan"
-            className="text-sm link-quiet text-muted-foreground hover:text-foreground inline-flex items-center gap-1.5"
+            className="text-sm font-semibold text-foreground hover:text-accent inline-flex items-center gap-1 transition-colors"
           >
-            Hepsini gör <ArrowRight className="h-3 w-3" strokeWidth={1.5} />
+            Hepsini gör <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.5} />
           </Link>
         </div>
         {recent.length === 0 ? (
-          <p className="text-muted-foreground py-8 border-y border-hairline text-center">
+          <p className="text-muted-foreground py-10 surface-card text-center px-6">
             Henüz tamamladığın bir yazı yok. Bir yazıyı sonuna kadar okuyup
             "Kaydır ve tamamla" ile bu listeye ekleyebilirsin.
           </p>
         ) : (
-          <ul className="divide-y divide-hairline border-y border-hairline">
+          <ul className="grid gap-3">
             {recent.map((r) => {
               const a = getArticleBySlug(r.slug);
               if (!a) return null;
@@ -103,13 +103,13 @@ const OverviewInner = () => {
                 <li key={r.slug}>
                   <Link
                     to={`/yazi/${a.slug}`}
-                    className="group flex gap-5 py-5 items-center"
+                    className="group surface-card flex gap-4 p-3 items-center"
                   >
-                    <div className="w-16 h-16 shrink-0 overflow-hidden bg-secondary">
+                    <div className="w-16 h-16 shrink-0 overflow-hidden rounded-xl bg-secondary">
                       <img src={a.cover} alt="" className="w-full h-full object-cover" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-display text-lg leading-snug group-hover:text-accent transition-colors">
+                      <h3 className="card-title font-display font-bold text-base md:text-lg leading-snug">
                         {a.title}
                       </h3>
                       <div className="mt-1 text-xs text-muted-foreground">
@@ -121,6 +121,7 @@ const OverviewInner = () => {
                         · {a.readMinutes} dk
                       </div>
                     </div>
+                    <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-accent group-hover:translate-x-0.5 transition-all mr-3" strokeWidth={2.5} />
                   </Link>
                 </li>
               );
@@ -143,12 +144,12 @@ const StatCell = ({
   label: string;
   hint: string;
 }) => (
-  <div className="bg-background p-6">
-    <div className="flex items-center gap-2 eyebrow text-muted-foreground">
-      <Icon className="h-3.5 w-3.5" strokeWidth={1.5} />
+  <div className="surface-card p-5 md:p-6 bg-gradient-to-br from-accent-soft/30 to-transparent">
+    <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+      <Icon className="h-3.5 w-3.5 text-accent" strokeWidth={2.5} />
       {label}
     </div>
-    <div className="mt-3 font-display text-3xl text-accent">{value}</div>
+    <div className="mt-3 font-display font-extrabold text-3xl md:text-4xl tracking-[-0.02em]">{value}</div>
     <p className="mt-1 text-xs text-muted-foreground">{hint}</p>
   </div>
 );
