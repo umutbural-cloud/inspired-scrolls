@@ -50,8 +50,8 @@ const SignIn = () => {
       }
     >
       <form className="space-y-5" onSubmit={onSubmit}>
-        <div className="space-y-1.5">
-          <label htmlFor="email" className="eyebrow">E-posta</label>
+        <div className="space-y-2">
+          <label htmlFor="email" className="text-xs font-semibold text-foreground/80">E-posta</label>
           <input
             id="email"
             type="email"
@@ -60,13 +60,13 @@ const SignIn = () => {
             onChange={(e) => setEmail(e.target.value)}
             autoComplete="email"
             placeholder="elif@ornek.com"
-            className="w-full h-11 px-3 bg-transparent border border-hairline focus:border-foreground outline-none transition-colors text-base "
+            className="w-full h-12 px-4 rounded-xl bg-secondary/60 border border-transparent focus:border-accent focus:bg-background outline-none transition-all text-base"
           />
         </div>
-        <div className="space-y-1.5">
+        <div className="space-y-2">
           <div className="flex items-baseline justify-between">
-            <label htmlFor="password" className="eyebrow">Şifre</label>
-            <Link to="/sifremi-unuttum" className="text-xs text-muted-foreground hover:text-foreground transition-colors">
+            <label htmlFor="password" className="text-xs font-semibold text-foreground/80">Şifre</label>
+            <Link to="/sifremi-unuttum" className="text-xs text-accent hover:underline">
               Şifremi unuttum
             </Link>
           </div>
@@ -78,14 +78,14 @@ const SignIn = () => {
             onChange={(e) => setPassword(e.target.value)}
             autoComplete="current-password"
             placeholder="••••••••"
-            className="w-full h-11 px-3 bg-transparent border border-hairline focus:border-foreground outline-none transition-colors text-base "
+            className="w-full h-12 px-4 rounded-xl bg-secondary/60 border border-transparent focus:border-accent focus:bg-background outline-none transition-all text-base"
           />
         </div>
 
         <button
           type="submit"
           disabled={submitting}
-          className="w-full h-11 bg-foreground text-background hover:bg-foreground/90 transition-colors text-sm inline-flex items-center justify-center gap-2 group disabled:opacity-60 disabled:cursor-not-allowed"
+          className="w-full h-12 rounded-full bg-accent text-accent-foreground hover:bg-accent-glow transition-all text-sm font-semibold inline-flex items-center justify-center gap-2 group disabled:opacity-60 disabled:cursor-not-allowed shadow-[var(--shadow-pop)]"
         >
           {submitting ? (
             <>
