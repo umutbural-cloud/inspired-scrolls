@@ -75,24 +75,27 @@ export const RichEditor = ({ initialContent, onChange, editable = true }: Props)
 
   return (
     <div className="relative">
-      {/* Sade floating toolbar — sayfa altında ortalanmış pill */}
+      {/* Floating toolbar — daha büyük, belirgin */}
       {editable && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-0.5 bg-foreground/95 backdrop-blur text-background rounded-full px-2 py-1.5 shadow-xl">
-          <ToolBtn onClick={() => editor.chain().focus().toggleBold().run()} active={editor.isActive("bold")} aria="Kalın"><Bold className="h-3.5 w-3.5" /></ToolBtn>
-          <ToolBtn onClick={() => editor.chain().focus().toggleItalic().run()} active={editor.isActive("italic")} aria="İtalik"><Italic className="h-3.5 w-3.5" /></ToolBtn>
+        <div
+          className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-1 bg-foreground text-background rounded-full px-2.5 py-2 shadow-2xl border border-foreground/20"
+          onMouseDown={(e) => e.preventDefault()}
+        >
+          <ToolBtn onClick={() => editor.chain().focus().toggleBold().run()} active={editor.isActive("bold")} aria="Kalın"><Bold className="h-4 w-4" strokeWidth={2.5} /></ToolBtn>
+          <ToolBtn onClick={() => editor.chain().focus().toggleItalic().run()} active={editor.isActive("italic")} aria="İtalik"><Italic className="h-4 w-4" strokeWidth={2.5} /></ToolBtn>
           <Sep />
-          <ToolBtn onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()} active={editor.isActive("heading", { level: 2 })} aria="Başlık"><Heading2 className="h-3.5 w-3.5" /></ToolBtn>
-          <ToolBtn onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()} active={editor.isActive("heading", { level: 3 })} aria="Alt başlık"><Heading3 className="h-3.5 w-3.5" /></ToolBtn>
-          <ToolBtn onClick={() => editor.chain().focus().toggleBlockquote().run()} active={editor.isActive("blockquote")} aria="Alıntı"><Quote className="h-3.5 w-3.5" /></ToolBtn>
+          <ToolBtn onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()} active={editor.isActive("heading", { level: 2 })} aria="Başlık"><Heading2 className="h-4 w-4" strokeWidth={2.5} /></ToolBtn>
+          <ToolBtn onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()} active={editor.isActive("heading", { level: 3 })} aria="Alt başlık"><Heading3 className="h-4 w-4" strokeWidth={2.5} /></ToolBtn>
+          <ToolBtn onClick={() => editor.chain().focus().toggleBlockquote().run()} active={editor.isActive("blockquote")} aria="Alıntı"><Quote className="h-4 w-4" strokeWidth={2.5} /></ToolBtn>
           <Sep />
-          <ToolBtn onClick={() => editor.chain().focus().toggleBulletList().run()} active={editor.isActive("bulletList")} aria="Liste"><List className="h-3.5 w-3.5" /></ToolBtn>
-          <ToolBtn onClick={() => editor.chain().focus().toggleOrderedList().run()} active={editor.isActive("orderedList")} aria="Sıralı liste"><ListOrdered className="h-3.5 w-3.5" /></ToolBtn>
+          <ToolBtn onClick={() => editor.chain().focus().toggleBulletList().run()} active={editor.isActive("bulletList")} aria="Liste"><List className="h-4 w-4" strokeWidth={2.5} /></ToolBtn>
+          <ToolBtn onClick={() => editor.chain().focus().toggleOrderedList().run()} active={editor.isActive("orderedList")} aria="Sıralı liste"><ListOrdered className="h-4 w-4" strokeWidth={2.5} /></ToolBtn>
           <Sep />
-          <ToolBtn onClick={setLink} active={editor.isActive("link")} aria="Bağlantı"><Link2 className="h-3.5 w-3.5" /></ToolBtn>
-          <ToolBtn onClick={() => fileRef.current?.click()} active={false} aria="Görsel"><ImageIcon className="h-3.5 w-3.5" /></ToolBtn>
+          <ToolBtn onClick={setLink} active={editor.isActive("link")} aria="Bağlantı"><Link2 className="h-4 w-4" strokeWidth={2.5} /></ToolBtn>
+          <ToolBtn onClick={() => fileRef.current?.click()} active={false} aria="Görsel"><ImageIcon className="h-4 w-4" strokeWidth={2.5} /></ToolBtn>
           <Sep />
-          <ToolBtn onClick={() => editor.chain().focus().undo().run()} active={false} aria="Geri al"><Undo2 className="h-3.5 w-3.5" /></ToolBtn>
-          <ToolBtn onClick={() => editor.chain().focus().redo().run()} active={false} aria="Yinele"><Redo2 className="h-3.5 w-3.5" /></ToolBtn>
+          <ToolBtn onClick={() => editor.chain().focus().undo().run()} active={false} aria="Geri al"><Undo2 className="h-4 w-4" strokeWidth={2.5} /></ToolBtn>
+          <ToolBtn onClick={() => editor.chain().focus().redo().run()} active={false} aria="Yinele"><Redo2 className="h-4 w-4" strokeWidth={2.5} /></ToolBtn>
           <input
             ref={fileRef}
             type="file"
@@ -117,15 +120,16 @@ const ToolBtn = ({
 }: { onClick: () => void; active: boolean; aria: string; children: React.ReactNode }) => (
   <button
     type="button"
+    onMouseDown={(e) => e.preventDefault()}
     onClick={onClick}
     aria-label={aria}
     title={aria}
-    className={`p-2 rounded-full transition-colors ${active ? "bg-accent text-accent-foreground" : "text-background/80 hover:text-background hover:bg-background/10"}`}
+    className={`h-9 w-9 inline-flex items-center justify-center rounded-full transition-colors ${active ? "bg-accent text-accent-foreground" : "text-background/85 hover:text-background hover:bg-background/15"}`}
   >
     {children}
   </button>
 );
 
-const Sep = () => <span className="w-px h-4 bg-background/20 mx-0.5" />;
+const Sep = () => <span className="w-px h-5 bg-background/25 mx-0.5" />;
 
 export type { Editor };

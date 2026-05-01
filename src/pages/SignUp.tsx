@@ -92,8 +92,8 @@ const SignUp = () => {
       }
     >
       <form className="space-y-5" onSubmit={onSubmit}>
-        <div className="space-y-1.5">
-          <label htmlFor="name" className="eyebrow">Ad ve soyad</label>
+        <div className="space-y-2">
+          <label htmlFor="name" className="text-xs font-semibold text-foreground/80">Ad ve soyad</label>
           <input
             id="name"
             type="text"
@@ -101,11 +101,11 @@ const SignUp = () => {
             onChange={(e) => setName(e.target.value)}
             autoComplete="name"
             placeholder="Elif Yıldırım"
-            className="w-full h-11 px-3 bg-transparent border border-hairline focus:border-foreground outline-none transition-colors text-base "
+            className="w-full h-12 px-4 rounded-xl bg-secondary/60 border border-transparent focus:border-accent focus:bg-background outline-none transition-all text-base"
           />
         </div>
-        <div className="space-y-1.5">
-          <label htmlFor="email" className="eyebrow">E-posta</label>
+        <div className="space-y-2">
+          <label htmlFor="email" className="text-xs font-semibold text-foreground/80">E-posta</label>
           <input
             id="email"
             type="email"
@@ -114,11 +114,11 @@ const SignUp = () => {
             onChange={(e) => setEmail(e.target.value)}
             autoComplete="email"
             placeholder="elif@ornek.com"
-            className="w-full h-11 px-3 bg-transparent border border-hairline focus:border-foreground outline-none transition-colors text-base "
+            className="w-full h-12 px-4 rounded-xl bg-secondary/60 border border-transparent focus:border-accent focus:bg-background outline-none transition-all text-base"
           />
         </div>
-        <div className="space-y-1.5">
-          <label htmlFor="password" className="eyebrow">Şifre</label>
+        <div className="space-y-2">
+          <label htmlFor="password" className="text-xs font-semibold text-foreground/80">Şifre</label>
           <input
             id="password"
             type="password"
@@ -128,7 +128,7 @@ const SignUp = () => {
             onChange={(e) => setPassword(e.target.value)}
             autoComplete="new-password"
             placeholder="En az 8 karakter"
-            className="w-full h-11 px-3 bg-transparent border border-hairline focus:border-foreground outline-none transition-colors text-base "
+            className="w-full h-12 px-4 rounded-xl bg-secondary/60 border border-transparent focus:border-accent focus:bg-background outline-none transition-all text-base"
           />
           <p className="text-xs text-muted-foreground">
             Şifren cihazlar arasında senin yanında kalır.
@@ -138,7 +138,7 @@ const SignUp = () => {
         <button
           type="submit"
           disabled={submitting}
-          className="w-full h-11 bg-foreground text-background hover:bg-foreground/90 transition-colors text-sm inline-flex items-center justify-center gap-2 group disabled:opacity-60 disabled:cursor-not-allowed"
+          className="w-full h-12 rounded-full bg-accent text-accent-foreground hover:bg-accent-glow transition-all text-sm font-semibold inline-flex items-center justify-center gap-2 group disabled:opacity-60 disabled:cursor-not-allowed shadow-[var(--shadow-pop)]"
         >
           {submitting ? (
             <>
