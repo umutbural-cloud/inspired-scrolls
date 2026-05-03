@@ -1,0 +1,2 @@
+ALTER TABLE public.reading_list_items ADD COLUMN IF NOT EXISTS position integer NOT NULL DEFAULT 0;
+CREATE INDEX IF NOT EXISTS idx_reading_list_items_list_position ON public.reading_list_items(list_id, position);

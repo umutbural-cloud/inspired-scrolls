@@ -284,16 +284,19 @@ export type Database = {
           added_at: string
           article_slug: string
           list_id: string
+          position: number
         }
         Insert: {
           added_at?: string
           article_slug: string
           list_id: string
+          position?: number
         }
         Update: {
           added_at?: string
           article_slug?: string
           list_id?: string
+          position?: number
         }
         Relationships: [
           {
