@@ -1,11 +1,17 @@
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import { Navigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { SiteLayout } from "./SiteLayout";
+import { seedDemoData } from "@/lib/seedDemo";
 
 export const AccountGuard = ({ children }: { children: ReactNode }) => {
   const { session, loading } = useAuth();
+  useEffect(() => {
+    if (session?.user?.id) {
+      seedDemoData(session.user.id);
+    }
+  }, [session?.user?.id]);
   if (loading) {
     return (
       <SiteLayout>
