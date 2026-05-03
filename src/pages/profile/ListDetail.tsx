@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams, Navigate } from "react-router-dom";
-import { Loader2, Trash2, ArrowLeft } from "lucide-react";
+import { Loader2, Trash2, ArrowLeft, ArrowUp, ArrowDown } from "lucide-react";
 import { AccountGuard } from "@/components/site/AccountGuard";
 import { AccountLayout } from "@/components/site/AccountLayout";
 import { useAuth } from "@/context/AuthContext";
@@ -8,7 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { getArticleBySlug } from "@/data/articleStore";
 import { toast } from "sonner";
 
-type Item = { article_slug: string; added_at: string };
+type Item = { article_slug: string; added_at: string; position: number };
 
 const ListDetailInner = () => {
   const { id } = useParams();
@@ -37,8 +37,9 @@ const ListDetailInner = () => {
       setIsDefault(list.is_default);
       const { data: it } = await supabase
         .from("reading_list_items")
-        .select("article_slug, added_at")
+        .select("article_slug, added_at, position")
         .eq("list_id", id)
+        .order("position", { ascending: true })
         .order("added_at", { ascending: false });
       setItems(it ?? []);
       setLoading(false);
@@ -56,6 +57,24 @@ const ListDetailInner = () => {
       .eq("list_id", id)
       .eq("article_slug", slug);
     if (error) toast.error(error.message);
+  };
+
+  const move = async (index: number, dir: -1 | 1) => {
+    const target = index + dir;
+    if (target < 0 || target >= items.length) return;
+    const next = [...items];
+    [next[index], next[target]] = [next[target], next[index]];
+    // Reassign positions sequentially
+    const updated = next.map((it, i) => ({ ...it, position: i }));
+    setItems(updated);
+    if (!id) return;
+    // Persist both swapped rows
+    const a = updated[index];
+    const b = updated[target];
+    await Promise.all([
+      supabase.from("reading_list_items").update({ position: a.position }).eq("list_id", id).eq("article_slug", a.article_slug),
+      supabase.from("reading_list_items").update({ position: b.position }).eq("list_id", id).eq("article_slug", b.article_slug),
+    ]);
   };
 
   const deleteList = async () => {
@@ -104,11 +123,29 @@ const ListDetailInner = () => {
         </p>
       ) : (
         <ul className="divide-y divide-hairline border-y border-hairline">
-          {items.map((it) => {
+          {items.map((it, idx) => {
             const a = getArticleBySlug(it.article_slug);
             if (!a) return null;
             return (
               <li key={it.article_slug} className="py-6 flex gap-5 items-start group">
+                <div className="flex flex-col gap-1 pt-1">
+                  <button
+                    onClick={() => move(idx, -1)}
+                    disabled={idx === 0}
+                    aria-label="Yukarı taşı"
+                    className="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-secondary disabled:opacity-30 disabled:hover:bg-transparent transition-colors"
+                  >
+                    <ArrowUp className="h-3.5 w-3.5" />
+                  </button>
+                  <button
+                    onClick={() => move(idx, 1)}
+                    disabled={idx === items.length - 1}
+                    aria-label="Aşağı taşı"
+                    className="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-secondary disabled:opacity-30 disabled:hover:bg-transparent transition-colors"
+                  >
+                    <ArrowDown className="h-3.5 w-3.5" />
+                  </button>
+                </div>
                 <Link to={`/yazi/${a.slug}`} className="w-24 h-24 shrink-0 overflow-hidden bg-secondary">
                   <img src={a.cover} alt="" className="w-full h-full object-cover" />
                 </Link>
