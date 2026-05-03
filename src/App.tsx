@@ -18,6 +18,8 @@ import Overview from "./pages/profile/Overview.tsx";
 import Lists from "./pages/profile/Lists.tsx";
 import ListDetail from "./pages/profile/ListDetail.tsx";
 import Completed from "./pages/profile/Completed.tsx";
+import CompletedDetail from "./pages/profile/CompletedDetail.tsx";
+import Notes from "./pages/profile/Notes.tsx";
 import Following from "./pages/profile/Following.tsx";
 import Settings from "./pages/profile/Settings.tsx";
 import NotificationSettings from "./pages/profile/NotificationSettings.tsx";
@@ -51,6 +53,8 @@ const App = () => (
             <Route path="/profil/listeler" element={<Lists />} />
             <Route path="/profil/listeler/:id" element={<ListDetail />} />
             <Route path="/profil/tamamlanan" element={<Completed />} />
+            <Route path="/profil/tamamlanan/:slug" element={<CompletedDetail />} />
+            <Route path="/profil/notlarim" element={<Notes />} />
             <Route path="/profil/takip" element={<Following />} />
             <Route path="/profil/ayarlar" element={<Settings />} />
             <Route path="/profil/ayarlar/bildirim" element={<NotificationSettings />} />
