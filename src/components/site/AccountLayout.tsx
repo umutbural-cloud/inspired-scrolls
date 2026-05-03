@@ -14,6 +14,7 @@ import {
   FileCheck2,
   PanelLeftClose,
   PanelLeftOpen,
+  StickyNote,
 } from "lucide-react";
 
 const sections = [
@@ -34,6 +35,7 @@ const sections = [
     items: [
       { to: "/profil/listeler", label: "Okuma Listeleri", icon: Bookmark },
       { to: "/profil/tamamlanan", label: "Tamamladığım Yazılar", icon: CheckCircle2 },
+      { to: "/profil/notlarim", label: "Notlarım", icon: StickyNote },
       { to: "/profil/takip", label: "Takip Ettiklerim", icon: Users },
     ],
   },

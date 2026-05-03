@@ -70,7 +70,7 @@ const CompletedInner = () => {
                   return (
                     <li key={r.article_slug}>
                       <Link
-                        to={`/yazi/${a.slug}`}
+                        to={`/profil/tamamlanan/${a.slug}`}
                         className="group flex gap-5 py-5 items-start"
                       >
                         <div className="w-20 h-20 shrink-0 overflow-hidden bg-secondary">
