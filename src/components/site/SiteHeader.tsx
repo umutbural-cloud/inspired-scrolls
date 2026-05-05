@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 
 const nav = [
-  { to: "/", label: "Ana Sayfa", end: true },
+  { to: "/bilimsel", label: "Bilimsel" },
   { to: "/arastirmalar", label: "Araştırmalar" },
   { to: "/kolektif", label: "Kolektif" },
 ];
@@ -46,7 +46,7 @@ export const SiteHeader = () => {
             <NavLink
               key={item.to}
               to={item.to}
-              end={item.end}
+              end={(item as { end?: boolean }).end}
               className={({ isActive }) =>
                 `text-sm font-medium px-4 py-1.5 rounded-full transition-all ${
                   isActive
