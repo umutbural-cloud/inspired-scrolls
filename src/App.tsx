@@ -12,6 +12,7 @@ import Category from "./pages/Category.tsx";
 import Research from "./pages/Research.tsx";
 import Collective from "./pages/Collective.tsx";
 import Scientific from "./pages/Scientific.tsx";
+import StudyDetail from "./pages/StudyDetail.tsx";
 import Search from "./pages/Search.tsx";
 import SignIn from "./pages/SignIn.tsx";
 import SignUp from "./pages/SignUp.tsx";
@@ -48,6 +49,7 @@ const App = () => (
             <Route path="/arastirmalar" element={<Research />} />
             <Route path="/kolektif" element={<Collective />} />
             <Route path="/bilimsel" element={<Scientific />} />
+            <Route path="/bilimsel/:slug" element={<StudyDetail />} />
             <Route path="/ara" element={<Search />} />
             <Route path="/giris" element={<SignIn />} />
             <Route path="/kayit" element={<SignUp />} />
