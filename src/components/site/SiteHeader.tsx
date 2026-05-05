@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 
 const nav = [
-  { to: "/", label: "Ana Sayfa", end: true },
+  { to: "/bilimsel", label: "Bilimsel" },
   { to: "/arastirmalar", label: "Araştırmalar" },
   { to: "/kolektif", label: "Kolektif" },
 ];
