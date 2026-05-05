@@ -46,7 +46,7 @@ export const SiteHeader = () => {
             <NavLink
               key={item.to}
               to={item.to}
-              end={item.end}
+              end={(item as { end?: boolean }).end}
               className={({ isActive }) =>
                 `text-sm font-medium px-4 py-1.5 rounded-full transition-all ${
                   isActive
