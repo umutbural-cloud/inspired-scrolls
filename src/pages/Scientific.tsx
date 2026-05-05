@@ -2,152 +2,7 @@ import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowUpRight, FlaskConical, Filter, Microscope, X } from "lucide-react";
 import { SiteLayout } from "@/components/site/SiteLayout";
-
-type Study = {
-  slug: string;
-  title: string;
-  authors: string[];
-  year: number;
-  journal: string;
-  findings: string;
-  categories: string[];
-  topics: string[];
-};
-
-const studies: Study[] = [
-  {
-    slug: "porn-consumption-sexual-choking",
-    title: "Pornografi Tüketimi ve Cinsel Boğma: Teorik Mekanizmaların Bir Değerlendirmesi",
-    authors: ["Wright, Paul J.", "Herbenick, Debby", "Tokunaga, Robert S."],
-    year: 2021,
-    journal: "Health Communication",
-    findings:
-      "Pornografi tüketiminin, cinsel partneri boğma olasılığını öngördüğü; bunun pornografide boğma davranışının normalleştirilmesinden kaynaklandığı düşünülüyor.",
-    categories: ["İlişkiler", "Toplum"],
-    topics: ["Saldırı Kültürü", "Cinsiyet Eşitsizliği", "Riskli Cinsel Davranış", "Cinsel Saldırganlık"],
-  },
-  {
-    slug: "porn-vs-sexual-science",
-    title: "Pornografi ve Cinsel Bilim: ABD'deki Gençlerin Cinsel Cehaletinde Pornografi Kullanımının Rolü",
-    authors: ["Wright, Paul J.", "Tokunaga, Robert S.", "Herbenick, Debby", "Paul, Bryant"],
-    year: 2021,
-    journal: "Communication Monographs",
-    findings:
-      "Pornografi tüketimi cinsel yanlış bilgilere inanmayla ilişkili; pornografi gençleri cinsel olarak daha bilgisiz hale getiriyor.",
-    categories: ["Bireyler", "İlişkiler", "Toplum"],
-    topics: ["Riskli Cinsel Davranış", "Cinsel Tutumlar", "Gençler"],
-  },
-  {
-    slug: "dehumanization-sexual-aggression",
-    title: "Pornografi Kullanımı, İki Tür İnsanlıktan Çıkarma ve Cinsel Saldırganlık",
-    authors: ["Zhou, Yanyan", "Liu, Tuo", "Yan, Yaojun", "Paul, Bryant"],
-    year: 2021,
-    journal: "Journal of Sex & Marital Therapy",
-    findings:
-      "Pornografi tüketimi hem hayvansal hem mekanik insanlıktan çıkarma ile ilişkili; bunlar saldırgan cinsel tutum ve davranışları öngörüyor.",
-    categories: ["Toplum"],
-    topics: ["Saldırı Kültürü", "Nesneleştirme", "Cinsel Saldırganlık"],
-  },
-  {
-    slug: "motivational-basis-of-porn-use",
-    title: "İnsanlar Neden Pornografi İzler? Pornografi Kullanımının Motivasyon Temelleri",
-    authors: ["Bőthe, Beáta", "Tóth-Király, István", "Potenza, Marc N.", "Demetrovics, Zsolt"],
-    year: 2021,
-    journal: "Psychology of Addictive Behaviors",
-    findings:
-      "Stres azaltma, duygu bastırma, can sıkıntısından kaçınma ve fantezi motivasyonları Problemli Pornografi Kullanımı ile ilişkili. Stres en güçlü öngörücü.",
-    categories: ["Bireyler"],
-    topics: ["Davranışsal Bağımlılık", "Mental Sağlık", "Cinsel Tutumlar"],
-  },
-  {
-    slug: "adolescent-pornography-exposure",
-    title: "ABD Gençlerinde Pornografiye Maruz Kalma, Medya Psikolojisi ve Cinsel Saldırganlık",
-    authors: ["Wright, Paul J.", "Paul, Bryant", "Herbenick, Debby"],
-    year: 2021,
-    journal: "Journal of Health Communication",
-    findings:
-      "14-18 yaş arası erkeklerin %84,4'ü, kızların %57,1'i pornografi izlemiş. Pornografiye maruz kalma cinsel saldırganlıkla anlamlı şekilde ilişkili.",
-    categories: ["Toplum"],
-    topics: ["Yaygınlık", "Cinsel Saldırganlık", "Cinsel Tutumlar", "Gençler"],
-  },
-  {
-    slug: "ppu-and-mental-health",
-    title: "Problemli Pornografi Kullanımı, Depresyon ve Anksiyete Arasındaki İlişki",
-    authors: ["Camilleri, Christian", "Perry, John T.", "Sammut, Stephen"],
-    year: 2021,
-    journal: "Frontiers in Psychology",
-    findings:
-      "Problemli pornografi kullanımı; depresyon, anksiyete ve düşük yaşam doyumu ile güçlü şekilde ilişkili bulundu.",
-    categories: ["Bireyler"],
-    topics: ["Davranışsal Bağımlılık", "Mental Sağlık", "Depresyon"],
-  },
-  {
-    slug: "social-media-addiction-teens",
-    title: "Ergenlerde Sosyal Medya Bağımlılığı ve Akademik Performans",
-    authors: ["Andreassen, Cecilie S.", "Pallesen, Ståle"],
-    year: 2020,
-    journal: "Computers in Human Behavior",
-    findings:
-      "Yoğun sosyal medya kullanımı akademik performansta düşüş, uyku bozukluğu ve dikkat eksikliği ile ilişkili.",
-    categories: ["Bireyler", "Toplum"],
-    topics: ["Davranışsal Bağımlılık", "Dikkat", "Gençler"],
-  },
-  {
-    slug: "smartphone-dopamine-loop",
-    title: "Akıllı Telefon Kullanımı, Dopamin Döngüleri ve Ödül Sistemleri",
-    authors: ["Lembke, Anna"], 
-    year: 2021,
-    journal: "Dopamine Nation Reviews",
-    findings:
-      "Sürekli bildirim ve sonsuz kaydırma mekanizmaları, beynin ödül sistemini bağımlılık benzeri kalıplara sokuyor.",
-    categories: ["Bireyler"],
-    topics: ["Davranışsal Bağımlılık", "Dikkat", "Mental Sağlık"],
-  },
-  {
-    slug: "neuroscience-of-internet-pornography",
-    title: "İnternet Pornografisinin Sinirbilimi: Sistematik Bir Derleme",
-    authors: ["Love, Todd", "Laier, Christian", "Brand, Matthias", "Hatch, Linda", "Hajela, Raju"],
-    year: 2015,
-    journal: "Behavioral Sciences",
-    findings:
-      "Sürekli pornografi tüketimi, beynin ön korteks ve ödül devrelerinde madde bağımlılığına benzer değişiklikler yaratıyor.",
-    categories: ["Bireyler"],
-    topics: ["Davranışsal Bağımlılık", "Beyin Plastisitesi", "Mental Sağlık"],
-  },
-  {
-    slug: "porn-and-relationship-satisfaction",
-    title: "Pornografi Kullanımı ve İlişki Doyumu: Boylamsal Bir Çalışma",
-    authors: ["Perry, Samuel L."],
-    year: 2020,
-    journal: "Archives of Sexual Behavior",
-    findings:
-      "Pornografi tüketiminin zaman içinde evlilik kalitesi ve ilişki doyumunda belirgin düşüşle ilişkili olduğu bulundu.",
-    categories: ["İlişkiler"],
-    topics: ["İlişki Doyumu", "Partner Etkileri"],
-  },
-  {
-    slug: "gaming-disorder-who",
-    title: "Oyun Bozukluğu: DSÖ Sınıflandırması ve Klinik Sonuçları",
-    authors: ["Pontes, Halley M.", "Griffiths, Mark D."],
-    year: 2020,
-    journal: "International Journal of Mental Health and Addiction",
-    findings:
-      "DSÖ tarafından tanınan oyun bozukluğu; uyku, akademik başarı ve sosyal işlevsellikte ciddi bozulmalarla ilişkili.",
-    categories: ["Bireyler"],
-    topics: ["Davranışsal Bağımlılık", "Mental Sağlık", "Gençler"],
-  },
-  {
-    slug: "porn-recovery-self-report",
-    title: "Pornografi Kullanımını Bırakmaya Çalışan Bireylerde Toparlanma Süreci",
-    authors: ["Fernandez, David P.", "Tee, Eugene Y. J.", "Fernandez, Elaine F."],
-    year: 2017,
-    journal: "Sexual Addiction & Compulsivity",
-    findings:
-      "Bırakma girişimleri sırasında geri tepme döngüleri yaygın; sosyal destek ve farkındalık temelli yaklaşımlar başarıyı artırıyor.",
-    categories: ["Bireyler"],
-    topics: ["Davranışsal Bağımlılık", "Toparlanma", "Mental Sağlık"],
-  },
-];
+import { studies } from "@/data/studies";
 
 const allCategories = Array.from(new Set(studies.flatMap((s) => s.categories))).sort();
 const allTopics = Array.from(new Set(studies.flatMap((s) => s.topics))).sort();
@@ -208,11 +63,92 @@ const Scientific = () => {
         </div>
       </section>
 
-      {/* Filters + List */}
+      {/* List + right filters */}
       <section className="wide-column px-6 py-12 md:py-16">
         <div className="grid lg:grid-cols-12 gap-10 lg:gap-12">
-          {/* Sidebar filters */}
-          <aside className="lg:col-span-4 lg:sticky lg:top-24 lg:self-start">
+          {/* Studies list */}
+          <div className="lg:col-span-8 min-w-0 lg:order-1">
+            <div className="flex items-baseline justify-between mb-6">
+              <div>
+                <span className="eyebrow">Sonuçlar</span>
+                <h2 className="mt-2 font-display font-bold text-2xl md:text-3xl tracking-tight">
+                  {filtered.length} çalışma
+                </h2>
+              </div>
+            </div>
+
+            {filtered.length === 0 ? (
+              <p className="text-muted-foreground py-20 text-center">
+                Bu filtrelere uygun çalışma bulunamadı.
+              </p>
+            ) : (
+              <ol className="space-y-5 md:space-y-6">
+                {filtered.map((s) => (
+                  <li key={s.slug} className="surface-card p-6 md:p-7 group">
+                    <Link to={`/bilimsel/${s.slug}`} className="inline-flex items-start gap-2 group/title">
+                      <h3 className="font-display font-bold text-lg md:text-xl leading-snug tracking-tight text-balance group-hover/title:text-accent transition-colors">
+                        {s.title}
+                      </h3>
+                      <ArrowUpRight className="h-4 w-4 mt-1 shrink-0 text-muted-foreground group-hover/title:text-accent transition-colors" strokeWidth={2.5} />
+                    </Link>
+
+                    <div className="mt-5 grid sm:grid-cols-2 gap-x-6 gap-y-4 text-xs">
+                      <div>
+                        <div className="eyebrow text-muted-foreground mb-1.5">Yazar(lar)</div>
+                        <p className="text-foreground/85 leading-relaxed">
+                          {s.authors.join("; ")}
+                        </p>
+                      </div>
+                      <div>
+                        <div className="eyebrow text-muted-foreground mb-1.5">Yayım</div>
+                        <p className="text-foreground/85">
+                          {s.year} · <span className="italic">{s.journal}</span>
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="mt-5">
+                      <div className="eyebrow text-muted-foreground mb-1.5">Temel Bulgular</div>
+                      <p className="text-sm md:text-[0.95rem] text-foreground/90 leading-relaxed">
+                        {s.findings}
+                      </p>
+                    </div>
+
+                    <div className="mt-5 pt-5 border-t border-hairline grid sm:grid-cols-2 gap-4">
+                      <div>
+                        <div className="eyebrow text-muted-foreground mb-2">Kategoriler</div>
+                        <div className="flex flex-wrap gap-1.5">
+                          {s.categories.map((c) => (
+                            <span key={c} className="tag">{c}</span>
+                          ))}
+                        </div>
+                      </div>
+                      <div>
+                        <div className="eyebrow text-muted-foreground mb-2">Konular</div>
+                        <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-muted-foreground">
+                          {s.topics.map((t) => (
+                            <span key={t}>#{t}</span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="mt-5">
+                      <Link
+                        to={`/bilimsel/${s.slug}`}
+                        className="inline-flex items-center gap-1 text-xs font-medium text-accent hover:underline"
+                      >
+                        Detayları gör <ArrowUpRight className="h-3 w-3" strokeWidth={2.5} />
+                      </Link>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            )}
+          </div>
+
+          {/* Sidebar filters (right) */}
+          <aside className="lg:col-span-4 lg:order-2 lg:sticky lg:top-24 lg:self-start">
             <div className="surface-card p-6">
               <div className="flex items-center justify-between mb-5">
                 <div className="inline-flex items-center gap-2">
@@ -274,78 +210,6 @@ const Scientific = () => {
               </div>
             </div>
           </aside>
-
-          {/* Studies list */}
-          <div className="lg:col-span-8 min-w-0">
-            <div className="flex items-baseline justify-between mb-6">
-              <div>
-                <span className="eyebrow">Sonuçlar</span>
-                <h2 className="mt-2 font-display font-bold text-2xl md:text-3xl tracking-tight">
-                  {filtered.length} çalışma
-                </h2>
-              </div>
-            </div>
-
-            {filtered.length === 0 ? (
-              <p className="text-muted-foreground py-20 text-center">
-                Bu filtrelere uygun çalışma bulunamadı.
-              </p>
-            ) : (
-              <ol className="space-y-5 md:space-y-6">
-                {filtered.map((s) => (
-                  <li key={s.slug} className="surface-card p-6 md:p-7 group">
-                    <Link to="#" className="inline-flex items-start gap-2 group/title">
-                      <h3 className="font-display font-bold text-lg md:text-xl leading-snug tracking-tight text-balance group-hover/title:text-accent transition-colors">
-                        {s.title}
-                      </h3>
-                      <ArrowUpRight className="h-4 w-4 mt-1 shrink-0 text-muted-foreground group-hover/title:text-accent transition-colors" strokeWidth={2.5} />
-                    </Link>
-
-                    <div className="mt-5 grid sm:grid-cols-2 gap-x-6 gap-y-4 text-xs">
-                      <div>
-                        <div className="eyebrow text-muted-foreground mb-1.5">Yazar(lar)</div>
-                        <p className="text-foreground/85 leading-relaxed">
-                          {s.authors.join("; ")}
-                        </p>
-                      </div>
-                      <div>
-                        <div className="eyebrow text-muted-foreground mb-1.5">Yayım</div>
-                        <p className="text-foreground/85">
-                          {s.year} · <span className="italic">{s.journal}</span>
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="mt-5">
-                      <div className="eyebrow text-muted-foreground mb-1.5">Temel Bulgular</div>
-                      <p className="text-sm md:text-[0.95rem] text-foreground/90 leading-relaxed">
-                        {s.findings}
-                      </p>
-                    </div>
-
-                    <div className="mt-5 pt-5 border-t border-hairline grid sm:grid-cols-2 gap-4">
-                      <div>
-                        <div className="eyebrow text-muted-foreground mb-2">Kategoriler</div>
-                        <div className="flex flex-wrap gap-1.5">
-                          {s.categories.map((c) => (
-                            <span key={c} className="tag">{c}</span>
-                          ))}
-                        </div>
-                      </div>
-                      <div>
-                        <div className="eyebrow text-muted-foreground mb-2">Konular</div>
-                        <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-muted-foreground">
-                          {s.topics.map((t) => (
-                            <span key={t}>#{t}</span>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                ))}
-              </ol>
-            )}
-          </div>
         </div>
       </section>
     </SiteLayout>
