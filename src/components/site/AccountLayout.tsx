@@ -15,12 +15,16 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   StickyNote,
+  Sprout,
 } from "lucide-react";
 
 const sections = [
   {
     label: "Genel",
-    items: [{ to: "/profil", label: "Genel Bakış", icon: LayoutDashboard, end: true }],
+    items: [
+      { to: "/profil", label: "Genel Bakış", icon: LayoutDashboard, end: true },
+      { to: "/profil/surecim", label: "Sürecim", icon: Sprout },
+    ],
   },
   {
     label: "Yazma",
