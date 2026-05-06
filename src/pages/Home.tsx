@@ -58,18 +58,18 @@ const Home = () => {
         <div className="wide-column relative px-4 md:px-6 pt-10 md:pt-16 pb-12 md:pb-20">
           <div className="grid lg:grid-cols-12 gap-6 lg:gap-8 items-stretch">
             {/* Slider — left, ~7/12 */}
-            <div className="lg:col-span-7">
-              <div className="overflow-hidden surface-card p-0" ref={emblaRef}>
-                <div className="flex">
+            <div className="lg:col-span-7 min-h-[460px] lg:min-h-[520px]">
+              <div className="overflow-hidden surface-card p-0 h-full" ref={emblaRef}>
+                <div className="flex h-full">
                   {slides.map((a) => (
-                    <div key={a.slug} className="flex-[0_0_100%] min-w-0">
-                      <Link to={`/yazi/${a.slug}`} className="group block relative">
-                        <div className="aspect-[16/10] overflow-hidden bg-secondary">
+                    <div key={a.slug} className="flex-[0_0_100%] min-w-0 relative">
+                      <Link to={`/yazi/${a.slug}`} className="group block relative h-full">
+                        <div className="h-full min-h-[460px] lg:min-h-[520px] overflow-hidden bg-secondary">
                           <img src={a.cover} alt={a.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.04]" />
                         </div>
                         <div className="absolute inset-x-0 bottom-0 p-5 md:p-7 bg-gradient-to-t from-foreground/85 via-foreground/40 to-transparent">
                           <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-background/80">
-                            <Sparkles className="h-3 w-3 text-accent" /> {a.category}
+                            <Sparkles className="h-3 w-3 text-primary-foreground" /> {a.category}
                           </span>
                           <h2 className="mt-2 font-display font-extrabold text-xl md:text-3xl text-background leading-tight tracking-tight text-balance">
                             {a.title}
@@ -87,7 +87,7 @@ const Home = () => {
 
             {/* Right widget */}
             <aside className="lg:col-span-5">
-              <div className="surface-card h-full p-6 md:p-7 bg-gradient-to-br from-accent-soft/40 to-secondary/40 flex flex-col">
+              <div className="surface-card h-full p-6 md:p-7 bg-secondary/50 flex flex-col">
                 <div>
                   <span className="eyebrow text-accent">Hoş geldin</span>
                   <h2 className="mt-1 font-display font-extrabold text-2xl md:text-3xl tracking-[-0.02em]">
