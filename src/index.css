@@ -10,41 +10,43 @@
 
 @layer base {
   :root {
-    /* Surface — Energetic Light, modern + dinamik */
-    --background: 0 0% 100%;             /* pure white */
-    --foreground: 224 24% 8%;            /* near-black ink */
+    /* Surface — Neverfap palette */
+    --background: 0 0% 100%;             /* #FFFFFF */
+    --foreground: 220 39% 11%;           /* #111827 */
 
     --surface-raised: 0 0% 100%;
-    --surface-sunken: 30 20% 97%;        /* warm off-white */
+    --surface-sunken: 150 11% 97%;       /* #F7F9F8 */
 
     --card: 0 0% 100%;
-    --card-foreground: 224 24% 8%;
+    --card-foreground: 220 39% 11%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 224 24% 8%;
+    --popover-foreground: 220 39% 11%;
 
-    --primary: 224 24% 8%;
+    /* Primary — vivid green #04B86F */
+    --primary: 154 96% 37%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 30 14% 95%;
-    --secondary-foreground: 224 24% 14%;
+    /* Secondary — mint #DDF8EC */
+    --secondary: 150 71% 92%;
+    --secondary-foreground: 218 63% 14%;
 
-    --muted: 30 10% 96%;
-    --muted-foreground: 224 8% 44%;
+    --muted: 150 11% 97%;
+    --muted-foreground: 220 9% 46%;      /* #6B7280 */
 
-    /* Accent — vivid coral */
-    --accent: 14 92% 58%;                /* #FB5538 ish */
+    /* Accent — deep navy #0D1E39 (used for emphasis blocks) */
+    --accent: 154 96% 37%;               /* keep accent = primary green for highlights */
     --accent-foreground: 0 0% 100%;
-    --accent-soft: 14 100% 94%;
-    --accent-glow: 18 100% 65%;
+    --accent-soft: 150 71% 92%;
+    --accent-glow: 154 80% 45%;
 
     --destructive: 0 80% 55%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 30 10% 91%;
-    --input: 30 10% 91%;
-    --ring: 14 92% 58%;
-    --hairline: 30 10% 90%;
+    --border: 150 11% 91%;               /* #E6ECE9 */
+    --input: 150 11% 91%;
+    --ring: 154 96% 37%;
+    --hairline: 150 11% 91%;
 
     --radius: 0.875rem;
 
@@ -55,10 +57,10 @@
     --font-mono: "JetBrains Mono", ui-monospace, monospace;
 
     /* Gradients */
-    --gradient-warm: linear-gradient(135deg, hsl(30 60% 96%) 0%, hsl(14 100% 94%) 100%);
-    --gradient-accent: linear-gradient(135deg, hsl(var(--accent)) 0%, hsl(var(--accent-glow)) 100%);
-    --shadow-pop: 0 10px 30px -12px hsl(14 92% 58% / 0.35);
-    --shadow-soft: 0 1px 2px hsl(224 24% 8% / 0.04), 0 8px 24px -10px hsl(224 24% 8% / 0.08);
+    --gradient-warm: linear-gradient(135deg, hsl(150 11% 97%) 0%, hsl(150 71% 92%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent-glow)) 100%);
+    --shadow-pop: 0 10px 30px -12px hsl(154 96% 37% / 0.35);
+    --shadow-soft: 0 1px 2px hsl(220 39% 11% / 0.04), 0 8px 24px -10px hsl(220 39% 11% / 0.08);
 
     /* Okuma genişlikleri */
     --reading-width: 40rem;
