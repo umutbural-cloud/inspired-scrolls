@@ -335,6 +335,51 @@ export type Database = {
         }
         Relationships: []
       }
+      recovery_profiles: {
+        Row: {
+          created_at: string
+          start_date: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          start_date?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          start_date?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      relapses: {
+        Row: {
+          created_at: string
+          id: string
+          note: string | null
+          occurred_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          note?: string | null
+          occurred_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          note?: string | null
+          occurred_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       tag_preferences: {
         Row: {
           created_at: string
