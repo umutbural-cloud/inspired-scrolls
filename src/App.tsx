@@ -17,6 +17,7 @@ import Search from "./pages/Search.tsx";
 import SignIn from "./pages/SignIn.tsx";
 import SignUp from "./pages/SignUp.tsx";
 import Overview from "./pages/profile/Overview.tsx";
+import Recovery from "./pages/profile/Recovery.tsx";
 import Lists from "./pages/profile/Lists.tsx";
 import ListDetail from "./pages/profile/ListDetail.tsx";
 import Completed from "./pages/profile/Completed.tsx";
@@ -54,6 +55,7 @@ const App = () => (
             <Route path="/giris" element={<SignIn />} />
             <Route path="/kayit" element={<SignUp />} />
             <Route path="/profil" element={<Overview />} />
+            <Route path="/profil/surecim" element={<Recovery />} />
             <Route path="/profil/listeler" element={<Lists />} />
             <Route path="/profil/listeler/:id" element={<ListDetail />} />
             <Route path="/profil/tamamlanan" element={<Completed />} />
