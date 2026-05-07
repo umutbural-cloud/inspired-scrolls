@@ -94,18 +94,6 @@ const Home = () => {
 
   const latest = useMemo(() => articles.slice(0, 5), []);
   const grid = useMemo(() => articles.slice(5, 11), []);
-  const stripCats = useMemo(
-    () => [
-      { name: "Bilimsel Çalışmalar", to: "/bilimsel", icon: Microscope },
-      { name: "Araştırmalar", to: "/arastirmalar", icon: BookOpen },
-      { name: "Kolektif", to: "/kolektif", icon: Users },
-      { name: "Nörobilim", to: "/kategori/bilim", icon: Brain },
-      { name: "Alışkanlıklar", to: "/kategori/dusunce", icon: Compass },
-      { name: "Motivasyon", to: "/kategori/edebiyat", icon: Flame },
-      { name: "Akademi", to: "/profil/surecim", icon: GraduationCap },
-    ],
-    []
-  );
 
   return (
     <SiteLayout>
