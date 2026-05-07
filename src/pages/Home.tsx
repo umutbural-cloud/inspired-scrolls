@@ -23,6 +23,7 @@ import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { articles, recent, categories } from "@/data/mock";
+import { studies } from "@/data/studies";
 import { useAuth } from "@/context/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 
