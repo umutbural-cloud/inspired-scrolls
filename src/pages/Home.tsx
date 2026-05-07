@@ -214,21 +214,44 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ============ 2. KATEGORİ HIZLI GEÇİŞ ŞERİDİ ============ */}
+      {/* ============ 2. DERLENEN BİLİMSEL ÇALIŞMALAR — CAROUSEL ============ */}
       <section className="border-y border-hairline bg-surface-sunken/40">
-        <div className="wide-column px-4 md:px-6 py-5">
+        <div className="wide-column px-4 md:px-6 py-8 md:py-10">
+          <div className="flex items-end justify-between mb-5">
+            <div>
+              <span className="eyebrow text-accent">Derlenen Bilimsel Çalışmalar</span>
+              <h2 className="mt-1 font-display font-extrabold text-xl md:text-2xl tracking-[-0.02em]">
+                Hakemli araştırmalar, sade Türkçe değerlendirmelerle
+              </h2>
+            </div>
+            <Link to="/bilimsel" className="hidden md:inline-flex text-sm text-muted-foreground hover:text-accent font-semibold items-center gap-1">
+              Tümü <ArrowUpRight className="h-3.5 w-3.5" />
+            </Link>
+          </div>
           <div ref={stripRef} className="overflow-hidden">
-            <div className="flex gap-3">
-              {stripCats.map((c) => (
+            <div className="flex gap-4">
+              {studies.map((s) => (
                 <Link
-                  key={c.name}
-                  to={c.to}
-                  className="group shrink-0 inline-flex items-center gap-2.5 px-4 py-2.5 rounded-full bg-background border border-hairline hover:border-accent/40 hover:-translate-y-0.5 transition-all"
+                  key={s.slug}
+                  to={`/bilimsel/${s.slug}`}
+                  className="group shrink-0 w-[300px] md:w-[340px] surface-card p-5 bg-background hover:-translate-y-0.5 transition-transform flex flex-col"
                 >
-                  <c.icon className="h-4 w-4 text-accent" strokeWidth={2} />
-                  <span className="text-sm font-semibold text-foreground group-hover:text-accent transition-colors">
-                    {c.name}
-                  </span>
+                  <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                    <Microscope className="h-3.5 w-3.5 text-accent" />
+                    <span className="text-accent">{s.journal}</span>
+                    <span>· {s.year}</span>
+                  </div>
+                  <h3 className="mt-3 font-display font-bold text-base leading-snug tracking-tight text-foreground group-hover:text-accent transition-colors line-clamp-3">
+                    {s.title}
+                  </h3>
+                  <p className="mt-2 text-xs text-muted-foreground line-clamp-3 leading-relaxed">
+                    {s.findings}
+                  </p>
+                  <div className="mt-3 pt-3 border-t border-hairline flex flex-wrap gap-1.5">
+                    {s.categories.slice(0, 2).map((c) => (
+                      <span key={c} className="tag text-[10px]">{c}</span>
+                    ))}
+                  </div>
                 </Link>
               ))}
             </div>
