@@ -3,12 +3,10 @@ import { Link, useNavigate } from "react-router-dom";
 import {
   ArrowRight,
   ArrowUpRight,
-  Sparkles,
   BookOpen,
   BookmarkCheck,
   TreePine,
   Shuffle,
-  Calendar,
   Headphones,
   Mail,
   Quote,
@@ -94,6 +92,9 @@ const Home = () => {
 
   const latest = useMemo(() => articles.slice(0, 5), []);
   const grid = useMemo(() => articles.slice(5, 11), []);
+  const collective = useMemo(() => articles.filter((a) => a.kind === "Kolektif").slice(0, 4), []);
+  const essays = useMemo(() => articles.filter((a) => a.kind === "Deneme").slice(0, 3), []);
+  const research = useMemo(() => articles.filter((a) => a.kind === "Araştırma").slice(0, 3), []);
 
   return (
     <SiteLayout>
@@ -111,7 +112,7 @@ const Home = () => {
                   <div className="flex h-full">
                     {manifestoSlides.map((s, i) => (
                       <div key={i} className="flex-[0_0_100%] min-w-0">
-                        <div className="p-8 md:p-14 lg:p-16 flex flex-col justify-between min-h-[360px] lg:min-h-[440px]">
+                        <div className="p-8 md:p-12 lg:p-14 flex flex-col justify-between min-h-[340px] lg:min-h-[420px]">
                           <span className="eyebrow text-accent">{s.eyebrow}</span>
                           <div>
                             <h1 className="mt-6 font-display font-extrabold text-3xl md:text-5xl lg:text-[3.4rem] leading-[1.05] tracking-[-0.035em] text-balance text-foreground max-w-3xl">
@@ -158,17 +159,14 @@ const Home = () => {
                 </h2>
                 <p className="text-sm text-muted-foreground">Bugün de buradasın. Bu önemli.</p>
 
-                <div className="mt-5 rounded-2xl p-5 bg-secondary/60 border border-hairline">
+                <div className="mt-4 rounded-2xl p-4 bg-secondary/60 border border-hairline">
                   <div className="flex items-center gap-3">
-                    <div className="h-12 w-12 rounded-xl bg-background border border-hairline flex items-center justify-center">
-                      <TreePine className="h-6 w-6 text-accent" strokeWidth={2} />
+                    <div className="h-11 w-11 rounded-xl bg-background border border-hairline flex items-center justify-center">
+                      <TreePine className="h-5 w-5 text-accent" strokeWidth={2} />
                     </div>
-                    <div>
-                      <div className="font-display font-extrabold text-3xl tracking-[-0.02em] leading-none">
-                        {days}
-                        <span className="ml-1 text-sm text-muted-foreground font-bold">Ağaç</span>
-                      </div>
-                      <div className="text-xs text-muted-foreground mt-1">Bağımlılıktan uzak gün</div>
+                    <div className="font-display font-extrabold text-2xl tracking-[-0.02em] leading-none">
+                      {days}
+                      <span className="ml-1 text-sm text-muted-foreground font-bold">Ağaç</span>
                     </div>
                   </div>
                 </div>
@@ -181,21 +179,10 @@ const Home = () => {
                 <button
                   onClick={() => nextSlug && navigate(`/yazi/${nextSlug}`)}
                   disabled={!nextSlug}
-                  className="mt-4 w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full bg-accent text-accent-foreground font-semibold text-sm hover:opacity-90 transition disabled:opacity-50"
+                  className="mt-4 w-full inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full bg-accent text-accent-foreground font-semibold text-sm hover:opacity-90 transition disabled:opacity-50"
                 >
                   <Shuffle className="h-4 w-4" /> Sıradaki yazıya geç
                 </button>
-
-                <div className="mt-5 pt-5 border-t border-hairline">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="text-muted-foreground inline-flex items-center gap-1.5">
-                      <Calendar className="h-3.5 w-3.5" /> Bugünkü check-in
-                    </span>
-                    <Link to="/profil/surecim" className="font-semibold text-accent hover:underline">
-                      Yap →
-                    </Link>
-                  </div>
-                </div>
               </div>
             </aside>
           </div>
@@ -300,33 +287,48 @@ const Home = () => {
             </ul>
           </div>
 
-          {/* Sağ: Başarı hikayeleri */}
-          <aside className="lg:col-span-4 space-y-6">
-            <div>
-              <span className="eyebrow text-accent">Kolektif</span>
-              <h2 className="mt-1 font-display font-extrabold text-2xl md:text-3xl tracking-[-0.03em]">
-                Son Başarı Hikayeleri
-              </h2>
+          {/* Sağ: Kolektif yazıları */}
+          <aside className="lg:col-span-4 space-y-5">
+            <div className="flex items-baseline justify-between">
+              <div>
+                <span className="eyebrow text-accent">Kolektif</span>
+                <h2 className="mt-1 font-display font-extrabold text-2xl md:text-3xl tracking-[-0.03em]">
+                  Yolun gerçek sesi
+                </h2>
+              </div>
+              <Link to="/kolektif" className="text-xs text-muted-foreground hover:text-accent font-semibold inline-flex items-center gap-1">
+                Tümü <ArrowUpRight className="h-3 w-3" />
+              </Link>
             </div>
 
             <div className="space-y-4">
-              {[
-                { name: "Anonim · 92 gün", quote: "İlk kez 'belki yapabilirim' dedim. Sonra yaptım. Sonra tekrar yaptım." },
-                { name: "M. K. · 184 gün", quote: "Geri düştüm, üzüldüm, devam ettim. Önemli olan tekrar başlamak." },
-                { name: "E. · 31 gün", quote: "İlk ay en zorudur derler, doğruymuş. Ama yalnız değildim — bu yeterliydi." },
-                { name: "Anonim · 365 gün", quote: "Bir yıl önce bunu okusam inanmazdım. Şimdi başkasına yazıyorum." },
-              ].map((s, i) => (
-                <article key={i} className="surface-card p-5 bg-background hover:-translate-y-0.5 transition">
-                  <Quote className="h-4 w-4 text-accent" />
-                  <p className="mt-3 text-sm leading-relaxed text-foreground">{s.quote}</p>
-                  <div className="mt-3 text-xs font-semibold text-muted-foreground">{s.name}</div>
-                </article>
+              {collective.map((a) => (
+                <Link
+                  key={a.slug}
+                  to={`/yazi/${a.slug}`}
+                  className="surface-card group block p-4 bg-background hover:-translate-y-0.5 transition"
+                >
+                  <div className="flex gap-3">
+                    <div className="h-20 w-20 shrink-0 rounded-lg overflow-hidden bg-secondary">
+                      <img src={a.cover} alt={a.title} className="w-full h-full object-cover group-hover:scale-[1.05] transition-transform duration-700" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-accent">
+                        <Users className="h-3 w-3" /> Kolektif
+                      </div>
+                      <h3 className="mt-1 font-display font-bold text-sm leading-snug tracking-tight group-hover:text-accent transition-colors line-clamp-2">
+                        {a.title}
+                      </h3>
+                      <div className="mt-1.5 flex items-center gap-1.5 text-[11px] text-muted-foreground">
+                        <img src={a.author.avatar} alt="" className="h-4 w-4 rounded-full object-cover" />
+                        <span className="font-semibold text-foreground/80 truncate">{a.author.name}</span>
+                        <span>· {a.readMinutes} dk</span>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
               ))}
             </div>
-
-            <Link to="/kolektif" className="block text-center text-sm font-semibold text-accent hover:underline">
-              Tüm hikayeler →
-            </Link>
           </aside>
         </div>
       </section>
@@ -507,6 +509,120 @@ const Home = () => {
           <AcademyCard icon={Flame} title="90 Günlük Reset" desc="Beynin ödül sistemini yeniden kalibre eden 90 günlük yapı." cta="Katıl" highlight />
           <AcademyCard icon={Brain} title="Gelişim Bilimi" desc="Davranış değişiminin nörobilim temelleri, sade dilde." cta="İncele" />
           <AcademyCard icon={Users} title="Seçkin Topluluk" desc="Anonim, yargılamayan, yürüyen bir grup. Sadece üyelere açık." cta="Katıl" dark />
+        </div>
+      </section>
+
+      {/* ============ 8. ZİHİN & NÖROBİLİM ŞERİDİ ============ */}
+      <section className="wide-column px-4 md:px-6 pb-16 md:pb-20">
+        <div className="flex items-end justify-between mb-6">
+          <div>
+            <span className="eyebrow text-accent">Zihin & Nörobilim</span>
+            <h2 className="mt-1 font-display font-extrabold text-2xl md:text-3xl tracking-[-0.03em]">
+              Beyninin nasıl çalıştığını anla
+            </h2>
+          </div>
+          <Link to="/arastirmalar" className="hidden md:inline-flex text-sm text-muted-foreground hover:text-accent font-semibold items-center gap-1">
+            Tümü <ArrowUpRight className="h-3.5 w-3.5" />
+          </Link>
+        </div>
+        <div className="grid md:grid-cols-3 gap-5">
+          {research.map((a) => (
+            <Link
+              key={a.slug}
+              to={`/yazi/${a.slug}`}
+              className="surface-card group overflow-hidden flex flex-col bg-background hover:-translate-y-0.5 transition-transform"
+            >
+              <div className="aspect-[16/10] overflow-hidden bg-secondary">
+                <img src={a.cover} alt={a.title} className="w-full h-full object-cover group-hover:scale-[1.05] transition-transform duration-700" />
+              </div>
+              <div className="p-5 flex flex-col gap-2 flex-1">
+                <div className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-accent">
+                  <Brain className="h-3 w-3" /> {a.category}
+                </div>
+                <h3 className="font-display font-bold text-base leading-snug tracking-tight group-hover:text-accent transition-colors line-clamp-2">
+                  {a.title}
+                </h3>
+                <p className="text-sm text-muted-foreground line-clamp-2">{a.excerpt}</p>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* ============ 9. GÜNLÜK PRATİKLER + ALINTI ============ */}
+      <section className="wide-column px-4 md:px-6 pb-16 md:pb-20">
+        <div className="grid lg:grid-cols-12 gap-6">
+          <div className="lg:col-span-7 surface-card p-7 md:p-9 bg-secondary/40">
+            <span className="eyebrow text-accent">Günlük Pratikler</span>
+            <h2 className="mt-2 font-display font-extrabold text-2xl md:text-3xl tracking-[-0.03em]">
+              Bugün denenebilecek küçük şeyler
+            </h2>
+            <ul className="mt-6 space-y-4">
+              {[
+                { t: "5 dakikalık nefes molası", d: "Tetikleyici geldiğinde önce nefes; sonra karar." },
+                { t: "Telefonu odadan çıkar", d: "Uyku öncesi tek kural. Bir hafta dene." },
+                { t: "Yürüyüş + ses kaydı", d: "20 dakika yürü, kafandakini sesli not et." },
+                { t: "Sabah üç satır", d: "Uyanır uyanmaz üç cümle yaz. Filtresiz." },
+              ].map((p, i) => (
+                <li key={i} className="flex gap-4 items-start">
+                  <div className="h-8 w-8 shrink-0 rounded-full bg-background border border-hairline flex items-center justify-center font-display font-extrabold text-sm text-accent">
+                    {i + 1}
+                  </div>
+                  <div>
+                    <div className="font-display font-bold text-base tracking-tight">{p.t}</div>
+                    <p className="text-sm text-muted-foreground mt-0.5">{p.d}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="lg:col-span-5 surface-card p-7 md:p-9 bg-foreground text-background flex flex-col justify-between">
+            <Quote className="h-8 w-8 text-accent" />
+            <p className="font-display font-extrabold text-xl md:text-2xl leading-snug tracking-[-0.02em] text-balance">
+              "İrade gücü bir kas değil, bir ortamdır. Ortamı değiştir, davranış değişir."
+            </p>
+            <div className="text-xs font-semibold tracking-wider uppercase text-background/60">
+              Haftanın notu
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ============ 10. DENEMELER & UZUN OKUMA ============ */}
+      <section className="wide-column px-4 md:px-6 pb-20 md:pb-28">
+        <div className="flex items-end justify-between mb-6">
+          <div>
+            <span className="eyebrow text-accent">Uzun okuma</span>
+            <h2 className="mt-1 font-display font-extrabold text-2xl md:text-3xl tracking-[-0.03em]">
+              Denemeler & düşünce yazıları
+            </h2>
+            <p className="mt-2 text-sm text-muted-foreground max-w-xl">
+              Hızdan uzak, yavaş, sindirilerek okunmak için yazılmış metinler.
+            </p>
+          </div>
+        </div>
+        <div className="grid md:grid-cols-3 gap-0 md:gap-0 divide-y md:divide-y-0 md:divide-x divide-hairline border-y border-hairline">
+          {essays.map((a) => (
+            <Link
+              key={a.slug}
+              to={`/yazi/${a.slug}`}
+              className="group p-6 md:p-8 hover:bg-surface-sunken/40 transition flex flex-col"
+            >
+              <div className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-accent">
+                <GraduationCap className="h-3 w-3" /> {a.category}
+              </div>
+              <h3 className="mt-3 font-display font-extrabold text-xl leading-snug tracking-[-0.02em] group-hover:text-accent transition-colors line-clamp-3">
+                {a.title}
+              </h3>
+              <p className="mt-3 text-sm text-muted-foreground leading-relaxed line-clamp-3">{a.excerpt}</p>
+              <div className="mt-5 flex items-center gap-2 text-xs text-muted-foreground">
+                <img src={a.author.avatar} alt="" className="h-5 w-5 rounded-full object-cover" />
+                <span className="font-semibold text-foreground/80">{a.author.name}</span>
+                <span>· {a.readMinutes} dk</span>
+              </div>
+            </Link>
+          ))}
         </div>
       </section>
     </SiteLayout>
