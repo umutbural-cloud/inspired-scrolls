@@ -16,9 +16,12 @@ import {
   Compass,
   Flame,
   GraduationCap,
+  ChevronLeft,
+  ChevronRight,
+  Activity,
+  CalendarDays,
 } from "lucide-react";
 import useEmblaCarousel from "embla-carousel-react";
-import Autoplay from "embla-carousel-autoplay";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { articles, recent, categories } from "@/data/mock";
 import { studies } from "@/data/studies";
@@ -27,25 +30,6 @@ import { supabase } from "@/integrations/supabase/client";
 
 const dayMs = 24 * 60 * 60 * 1000;
 
-/* ---------- Manifesto carousel slides ---------- */
-const manifestoSlides = [
-  {
-    eyebrow: "Manifesto",
-    title: "İyileşmek tek seferlik bir karar değil. Her gün yeniden verilen küçük bir söz.",
-    body: "Süreç çizgisel değildir; ama mümkündür. Burada yargı yok — sadece sen, bilim ve sabırla yürünen bir patika.",
-  },
-  {
-    eyebrow: "Yaklaşım",
-    title: "Bağımlılık bir karakter zaafı değil, öğrenilmiş bir döngüdür. Yeni döngüler kurulabilir.",
-    body: "Nörobilim, davranış değişimi ve insan deneyimi; üçü birden, sade bir dille.",
-  },
-  {
-    eyebrow: "Söz",
-    title: "Geri düştüğünde de buradayız. Süreç tekrar başlar — sıfırdan değil, daha bilgili bir yerden.",
-    body: "Küçük ilerleme, ilerlemedir. Kontrolü yeniden kazanmak mümkündür.",
-  },
-];
-
 const Home = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -53,11 +37,10 @@ const Home = () => {
   const [days, setDays] = useState(0);
   const [completedSlugs, setCompletedSlugs] = useState<Set<string>>(new Set());
   const [savedSlugs, setSavedSlugs] = useState<string[]>([]);
+  const [readStreak, setReadStreak] = useState(0);
 
-  /* Embla — manifesto (left hero) */
-  const [heroRef] = useEmblaCarousel({ loop: true, align: "start", duration: 30 }, [
-    Autoplay({ delay: 6500, stopOnInteraction: false }),
-  ]);
+  /* Embla — hero article carousel (manual nav, no autoplay) */
+  const [heroRef, heroApi] = useEmblaCarousel({ loop: true, align: "start", duration: 30 });
 
   /* Embla — yatay kategori şeridi */
   const [stripRef] = useEmblaCarousel({ loop: false, align: "start", dragFree: true });
@@ -68,13 +51,33 @@ const Home = () => {
       const [{ data: p }, { data: rp }, { data: cs }, { data: lists }] = await Promise.all([
         supabase.from("profiles").select("display_name").eq("id", user.id).maybeSingle(),
         supabase.from("recovery_profiles").select("start_date").eq("user_id", user.id).maybeSingle(),
-        supabase.from("completed_articles").select("article_slug").eq("user_id", user.id),
+        supabase.from("completed_articles").select("article_slug, completed_at").eq("user_id", user.id).order("completed_at", { ascending: false }),
         supabase.from("reading_lists").select("id").eq("user_id", user.id),
       ]);
       if (p?.display_name) setDisplayName(p.display_name);
       if (rp?.start_date) setDays(Math.max(0, Math.floor((Date.now() - +new Date(rp.start_date)) / dayMs)));
       const cset = new Set((cs ?? []).map((x) => x.article_slug));
       setCompletedSlugs(cset);
+
+      // Reading streak: ardışık günler (bugün veya dün ile başlamalı)
+      const dayKeys = new Set(
+        (cs ?? []).map((x: any) => {
+          const d = new Date(x.completed_at);
+          d.setHours(0, 0, 0, 0);
+          return d.getTime();
+        }),
+      );
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      let cursor = today.getTime();
+      let streak = 0;
+      if (!dayKeys.has(cursor)) cursor -= dayMs; // dünden başlat
+      while (dayKeys.has(cursor)) {
+        streak += 1;
+        cursor -= dayMs;
+      }
+      setReadStreak(streak);
+
       const ids = (lists ?? []).map((l) => l.id);
       if (ids.length) {
         const { data: items } = await supabase
@@ -95,6 +98,7 @@ const Home = () => {
   const collective = useMemo(() => articles.filter((a) => a.kind === "Kolektif").slice(0, 4), []);
   const essays = useMemo(() => articles.filter((a) => a.kind === "Deneme").slice(0, 3), []);
   const research = useMemo(() => articles.filter((a) => a.kind === "Araştırma").slice(0, 3), []);
+  const heroSlides = useMemo(() => articles.slice(0, 6), []);
 
   return (
     <SiteLayout>
@@ -104,49 +108,68 @@ const Home = () => {
         <div aria-hidden className="pointer-events-none absolute -bottom-40 -left-32 w-[30rem] h-[30rem] rounded-full bg-secondary/40 blur-3xl" />
 
         <div className="wide-column relative px-4 md:px-6 pt-10 md:pt-14 pb-10 md:pb-14">
-          <div className="grid lg:grid-cols-12 gap-6 items-stretch">
-            {/* Left: Manifesto carousel — 8/12 */}
-            <div className="lg:col-span-8">
-              <div className="surface-card overflow-hidden h-full bg-gradient-to-br from-secondary/60 via-background to-background">
+          <div className="grid lg:grid-cols-12 gap-6 items-stretch lg:h-[855px]">
+            {/* Left: Article carousel — 8/12 (16:9) */}
+            <div className="lg:col-span-8 h-full">
+              <div className="surface-card relative overflow-hidden h-full bg-background group">
                 <div ref={heroRef} className="overflow-hidden h-full">
                   <div className="flex h-full">
-                    {manifestoSlides.map((s, i) => (
-                      <div key={i} className="flex-[0_0_100%] min-w-0">
-                        <div className="p-8 md:p-12 lg:p-14 flex flex-col justify-between min-h-[340px] lg:min-h-[420px]">
-                          <span className="eyebrow text-accent">{s.eyebrow}</span>
-                          <div>
-                            <h1 className="mt-6 font-display font-extrabold text-3xl md:text-5xl lg:text-[3.4rem] leading-[1.05] tracking-[-0.035em] text-balance text-foreground max-w-3xl">
-                              {s.title}
+                    {heroSlides.map((a) => (
+                      <div key={a.slug} className="flex-[0_0_100%] min-w-0 h-full">
+                        <Link to={`/yazi/${a.slug}`} className="relative block h-full w-full">
+                          <img
+                            src={a.cover}
+                            alt={a.title}
+                            className="absolute inset-0 w-full h-full object-cover"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-foreground/85 via-foreground/40 to-transparent" />
+                          <div className="relative z-10 h-full flex flex-col justify-end p-8 md:p-12 lg:p-14 text-background">
+                            <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider">
+                              <span className="px-2.5 py-1 rounded-full bg-accent text-accent-foreground">{a.kind}</span>
+                              <span className="text-background/80">{a.category}</span>
+                              <span className="text-background/60">· {a.readMinutes} dk okuma</span>
+                            </div>
+                            <h1 className="mt-5 font-display font-extrabold text-3xl md:text-5xl lg:text-[3.2rem] leading-[1.05] tracking-[-0.035em] text-balance max-w-3xl">
+                              {a.title}
                             </h1>
-                            <p className="mt-6 text-base md:text-lg text-muted-foreground max-w-xl leading-relaxed">
-                              {s.body}
+                            <p className="mt-4 text-base md:text-lg text-background/80 max-w-2xl leading-relaxed line-clamp-2">
+                              {a.excerpt}
                             </p>
+                            <div className="mt-6 flex items-center gap-3 text-sm">
+                              <img src={a.author.avatar} alt="" className="h-8 w-8 rounded-full object-cover ring-2 ring-background/30" />
+                              <span className="font-semibold">{a.author.name}</span>
+                              <span className="text-background/60">· {a.publishedAt}</span>
+                            </div>
                           </div>
-                          <div className="mt-8 flex items-center gap-3">
-                            <Link
-                              to="/profil/surecim"
-                              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-foreground text-background text-sm font-semibold hover:bg-foreground/90 transition"
-                            >
-                              Sürece başla <ArrowRight className="h-4 w-4" />
-                            </Link>
-                            <Link
-                              to="/bilimsel"
-                              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-background border border-hairline text-sm font-semibold text-foreground hover:border-accent/40 transition"
-                            >
-                              Bilimi keşfet
-                            </Link>
-                          </div>
-                        </div>
+                        </Link>
                       </div>
                     ))}
                   </div>
                 </div>
+
+                {/* Manual nav buttons */}
+                <button
+                  type="button"
+                  aria-label="Önceki"
+                  onClick={() => heroApi?.scrollPrev()}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 z-20 h-11 w-11 rounded-full bg-background/90 backdrop-blur text-foreground flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition hover:bg-background"
+                >
+                  <ChevronLeft className="h-5 w-5" />
+                </button>
+                <button
+                  type="button"
+                  aria-label="Sonraki"
+                  onClick={() => heroApi?.scrollNext()}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 z-20 h-11 w-11 rounded-full bg-background/90 backdrop-blur text-foreground flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition hover:bg-background"
+                >
+                  <ChevronRight className="h-5 w-5" />
+                </button>
               </div>
             </div>
 
             {/* Right: Süreç bölümü — 4/12 */}
-            <aside className="lg:col-span-4">
-              <div className="surface-card h-full p-6 md:p-7 bg-background flex flex-col">
+            <aside className="lg:col-span-4 h-full">
+              <div className="surface-card h-full p-6 md:p-7 bg-background flex flex-col overflow-hidden">
                 <div className="flex items-center justify-between">
                   <span className="eyebrow text-accent">Sürecin</span>
                   <Link to="/profil/surecim" className="text-xs text-muted-foreground hover:text-foreground inline-flex items-center gap-1">
@@ -159,27 +182,53 @@ const Home = () => {
                 </h2>
                 <p className="text-sm text-muted-foreground">Bugün de buradasın. Bu önemli.</p>
 
-                <div className="mt-4 rounded-2xl p-4 bg-secondary/60 border border-hairline">
-                  <div className="flex items-center gap-3">
-                    <div className="h-11 w-11 rounded-xl bg-background border border-hairline flex items-center justify-center">
-                      <TreePine className="h-5 w-5 text-accent" strokeWidth={2} />
-                    </div>
+                {/* Hero stat — Ağaç sayısı */}
+                <div className="mt-5 rounded-2xl p-5 bg-gradient-to-br from-accent/10 via-secondary/60 to-background border border-hairline">
+                  <div className="flex items-center gap-2 eyebrow text-accent">
+                    <TreePine className="h-3.5 w-3.5" /> Bağımlılıktan uzak
+                  </div>
+                  <div className="mt-2 flex items-baseline gap-2">
+                    <div className="font-display font-extrabold text-5xl tracking-[-0.03em] leading-none">{days}</div>
+                    <div className="text-base font-bold text-muted-foreground">Ağaç</div>
+                  </div>
+                  <p className="mt-2 text-xs text-muted-foreground">Her gün dikilen bir ağaç. İlerlemen büyüyor.</p>
+                </div>
+
+                {/* Streak */}
+                <div className="mt-4 rounded-2xl p-4 bg-surface-sunken border border-hairline flex items-center gap-3">
+                  <div className="h-11 w-11 rounded-xl bg-accent/10 flex items-center justify-center shrink-0">
+                    <Flame className="h-5 w-5 text-accent" strokeWidth={2.4} />
+                  </div>
+                  <div className="min-w-0">
                     <div className="font-display font-extrabold text-2xl tracking-[-0.02em] leading-none">
-                      {days}
-                      <span className="ml-1 text-sm text-muted-foreground font-bold">Ağaç</span>
+                      {readStreak} <span className="text-sm text-muted-foreground font-bold">gün</span>
+                    </div>
+                    <div className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mt-1">
+                      Kesintisiz okuma serisi
                     </div>
                   </div>
                 </div>
 
+                {/* Mini stats */}
                 <div className="mt-3 grid grid-cols-2 gap-3">
                   <MiniStat icon={BookmarkCheck} value={completedSlugs.size} label="Okunan" />
                   <MiniStat icon={BookOpen} value={pendingSlugs.length} label="Bekleyen" />
                 </div>
 
+                {/* Filler — bugün ne okumalıyım */}
+                <div className="mt-4 rounded-2xl p-4 bg-secondary/40 border border-hairline flex-1 flex flex-col justify-end">
+                  <div className="flex items-center gap-2 eyebrow text-accent">
+                    <Activity className="h-3.5 w-3.5" /> Bugünün önerisi
+                  </div>
+                  <p className="mt-2 text-sm text-foreground/85 leading-relaxed line-clamp-3">
+                    Küçük adımlar büyük dönüşümler yaratır. Bekleyen okuma listenden bir yazıyla başla.
+                  </p>
+                </div>
+
                 <button
                   onClick={() => nextSlug && navigate(`/yazi/${nextSlug}`)}
                   disabled={!nextSlug}
-                  className="mt-4 w-full inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full bg-accent text-accent-foreground font-semibold text-sm hover:opacity-90 transition disabled:opacity-50"
+                  className="mt-4 w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full bg-accent text-accent-foreground font-semibold text-sm hover:opacity-90 transition disabled:opacity-50"
                 >
                   <Shuffle className="h-4 w-4" /> Sıradaki yazıya geç
                 </button>
