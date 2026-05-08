@@ -111,7 +111,7 @@ const Home = () => {
                   <div className="flex h-full">
                     {manifestoSlides.map((s, i) => (
                       <div key={i} className="flex-[0_0_100%] min-w-0">
-                        <div className="p-8 md:p-14 lg:p-16 flex flex-col justify-between min-h-[360px] lg:min-h-[440px]">
+                        <div className="p-8 md:p-12 lg:p-14 flex flex-col justify-between min-h-[340px] lg:min-h-[420px]">
                           <span className="eyebrow text-accent">{s.eyebrow}</span>
                           <div>
                             <h1 className="mt-6 font-display font-extrabold text-3xl md:text-5xl lg:text-[3.4rem] leading-[1.05] tracking-[-0.035em] text-balance text-foreground max-w-3xl">
@@ -158,17 +158,14 @@ const Home = () => {
                 </h2>
                 <p className="text-sm text-muted-foreground">Bugün de buradasın. Bu önemli.</p>
 
-                <div className="mt-5 rounded-2xl p-5 bg-secondary/60 border border-hairline">
+                <div className="mt-4 rounded-2xl p-4 bg-secondary/60 border border-hairline">
                   <div className="flex items-center gap-3">
-                    <div className="h-12 w-12 rounded-xl bg-background border border-hairline flex items-center justify-center">
-                      <TreePine className="h-6 w-6 text-accent" strokeWidth={2} />
+                    <div className="h-11 w-11 rounded-xl bg-background border border-hairline flex items-center justify-center">
+                      <TreePine className="h-5 w-5 text-accent" strokeWidth={2} />
                     </div>
-                    <div>
-                      <div className="font-display font-extrabold text-3xl tracking-[-0.02em] leading-none">
-                        {days}
-                        <span className="ml-1 text-sm text-muted-foreground font-bold">Ağaç</span>
-                      </div>
-                      <div className="text-xs text-muted-foreground mt-1">Bağımlılıktan uzak gün</div>
+                    <div className="font-display font-extrabold text-2xl tracking-[-0.02em] leading-none">
+                      {days}
+                      <span className="ml-1 text-sm text-muted-foreground font-bold">Ağaç</span>
                     </div>
                   </div>
                 </div>
@@ -181,21 +178,10 @@ const Home = () => {
                 <button
                   onClick={() => nextSlug && navigate(`/yazi/${nextSlug}`)}
                   disabled={!nextSlug}
-                  className="mt-4 w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full bg-accent text-accent-foreground font-semibold text-sm hover:opacity-90 transition disabled:opacity-50"
+                  className="mt-4 w-full inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full bg-accent text-accent-foreground font-semibold text-sm hover:opacity-90 transition disabled:opacity-50"
                 >
                   <Shuffle className="h-4 w-4" /> Sıradaki yazıya geç
                 </button>
-
-                <div className="mt-5 pt-5 border-t border-hairline">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="text-muted-foreground inline-flex items-center gap-1.5">
-                      <Calendar className="h-3.5 w-3.5" /> Bugünkü check-in
-                    </span>
-                    <Link to="/profil/surecim" className="font-semibold text-accent hover:underline">
-                      Yap →
-                    </Link>
-                  </div>
-                </div>
               </div>
             </aside>
           </div>
