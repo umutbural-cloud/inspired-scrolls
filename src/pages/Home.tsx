@@ -3,12 +3,10 @@ import { Link, useNavigate } from "react-router-dom";
 import {
   ArrowRight,
   ArrowUpRight,
-  Sparkles,
   BookOpen,
   BookmarkCheck,
   TreePine,
   Shuffle,
-  Calendar,
   Headphones,
   Mail,
   Quote,
